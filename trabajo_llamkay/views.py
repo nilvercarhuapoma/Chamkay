@@ -1,8 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
-from django.shortcuts import render
-
 def index(request):
     return render(request, 'trabajo_llamkay/index.html')
 
@@ -15,3 +12,24 @@ def medios(request):
 
 def contactanos(request):
     return render(request,'trabajo_llamkay/contactanos.html')
+
+
+def index(request):
+    return render(request, 'index.html', {
+        'comunidad': [
+            {'name': 'Busco carpintero', 'image': 'engineering.jpg'},
+            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
+            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg'},
+        ],
+        'ciudad': [
+            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
+        ],
+        'distrito': [
+            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg'},
+        ],
+        'departamento': [
+            {'name': 'Busco personas para sembrar', 'image': 'campo.jpg'},
+            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
+            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg'},
+        ],
+    })

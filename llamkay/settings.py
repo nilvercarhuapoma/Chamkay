@@ -38,15 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'trabajo_llamkay',
-    'chat',
-    'idiomas',
-    'legal',
-    'planes',
-    'postulaciones',
-    'reportes',
-    'trabajos',
-    'usuarios',
-    'zonas',
+   
     
     
 ]
@@ -88,7 +80,7 @@ WSGI_APPLICATION = 'llamkay.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'llamkay',
+        'NAME': 'llankay',
         'USER': 'leimer',
         'PASSWORD': '12345',
         'HOST': 'localhost',
@@ -140,4 +132,3 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #modelos de apps
 
-AUTH_USER_MODEL = 'usuarios.Usuario'
