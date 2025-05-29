@@ -38,7 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'trabajo_llamkay',
+<<<<<<< HEAD
    
+=======
+    'trabajos',
+    'usuarios',
+    
+>>>>>>> feature/trabajos
     
     
 ]
@@ -132,3 +138,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #modelos de apps
 
+<<<<<<< HEAD
+=======
+AUTH_USER_MODEL = 'usuarios.Usuario'
+
+>>>>>>> feature/trabajos
