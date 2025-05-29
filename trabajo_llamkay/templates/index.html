@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LLamkay</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lobster&family=Playwrite+HU:wght@100..400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">LLamkay</div>
+            <nav>
+                <a href="#">Nosotros</a>
+                <div class="auth-buttons">
+                    <button class="btn blue">Registrarse</button>
+                    <button class="btn grey">Iniciar sesión</button>
+                 </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <img src="{% static 'images/foto-index.jpg' %}" alt="Banner">
+        <div class="hero-text">
+            <h1>Encuentra el trabajo ideal para ti</h1>
+            <p>LLamkay conecta a empleadores con empresas</p>
+            <div class="hero-buttons">
+                <button class="btn blue">Publica un trabajo</button>
+                <button class="btn grey">Aplica para un trabajo</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="browse">
+        <h2>Busca trabajos por</h2>
+      <div class="tabs" id="tab-options">
+        <span class="tab active" data-category="comunidad">Comunidad</span>
+        <span class="tab" data-category="ciudad">Ciudad</span>
+        <span class="tab" data-category="distrito">Distrito</span>
+        <span class="tab" data-category="departamento">Departamento</span>
+    </div>
+
+    <div class="cards-container" id="cards-container">
+        {% for category in comunidad %}
+            <div class="card comunidad">
+                <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                <p>{{ category.name }}</p>
+            </div>
+        {% endfor %}
+
+        {% for category in ciudad %}
+            <div class="card ciudad hidden">
+                <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                <p>{{ category.name }}</p>
+            </div>
+            {% endfor %}
+
+            {% for category in distrito %}
+                <div class="card distrito hidden">
+                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                    <p>{{ category.name }}</p>
+                </div>
+            {% endfor %}
+
+            {% for category in departamento %}
+                <div class="card departamento hidden">
+                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                    <p>{{ category.name }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+    </section>
+    <script src="{% static 'js/tabs.js' %}"></script>
+</body>
+</html>
