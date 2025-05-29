@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Llamkay</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+
+<body>
+    <div class="registro-container">
+        <div class="form-box">
+            <div class="logo">
+                <div class="icon">🧳</div>
+                <h2>Llamkay</h2>
+            </div>
+            <h3>Crear cuenta de trabajador</h3>
+            <p class="subtitle">Paso 1 de 3: Información Personal</p>
+
+            <div class="progress-bar">
+                <div class="progress active"></div>
+                <div class="progress"></div>
+                <div class="progress"></div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Información Personal</legend>
+                    <p class="form-subtitle">Ingresa tu información básica</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre *</label>
+                            <input type="text" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Apellido *</label>
+                            <input type="text" name="apellido" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correo electrónico *</label>
+                        <input type="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Teléfono *</label>
+                        <input type="tel" name="telefono" required>
+                    </div>
+
+                    <div class="form-group password">
+                        <label>Contraseña *</label>
+                        <input type="password" name="password" required>
+                        <span class="toggle-password">👁️</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirmar contraseña *</label>
+                        <input type="password" name="confirm_password" required>
+                    </div>
+
+                    <div class="form-group checkbox">
+                        <label>
+                            <input type="checkbox" required>
+                            Acepto los <a href="#">términos y condiciones</a> y la <a href="#">política de
+                                privacidad</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Siguiente</button>
+                </fieldset>
+            </form>
+
+            <p class="login-link">¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+</body>
+
+</html>
