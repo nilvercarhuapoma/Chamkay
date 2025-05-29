@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Trabajos Publicados</title>
+  <link rel="stylesheet" href="{% static 'css/all_trabajos.css' %}">
+</head>
+<body>
+  <div class="busqueda-filtros">
+    <input type="text" placeholder="Buscar por Departamento" id="buscar-departamento">
+    <input type="text" placeholder="Buscar por Ciudad" id="buscar-ciudad">
+    <input type="text" placeholder="Buscar por Distrito" id="buscar-distrito">
+    <input type="text" placeholder="Buscar por Comunidad" id="buscar-comunidad">
+    
+  </div>
+
+  <div class="contenedor-trabajos">
+    {% for trabajo in trabajos %}
+    <div class="tarjeta-trabajo">
+      <h3 class="titulo">{{ trabajo.titulo }}</h3>
+      {% if trabajo.imagen %}
+        <img src="{{ trabajo.imagen.url }}" alt="Imagen del trabajo" class="imagen-trabajo">
+      {% endif %}
+      <p class="fecha-publicacion">Publicado: {{ trabajo.fecha_publicacion|date:"d M Y" }}</p>
+
+      <div class="contenido-trabajo">
+        <p><strong>Descripción:</strong> {{ trabajo.descripcion }}</p>
+        <p><strong>Herramientas:</strong> {{ trabajo.herramientas }}</p>
+        <p><strong>Dirección:</strong>
+          {{ trabajo.departamento }},
+          {{ trabajo.ciudad }},
+          {{ trabajo.distrito }},
+          {{ trabajo.comunidad }}
+          
+        </p>
+        <p class="fecha-limite">
+          <strong>Fecha Límite:</strong> {{ trabajo.fecha_limite }} {{ trabajo.hora_limite }}
+        </p>
+      </div>
+
+      <div class="acciones">
+        <button class="btn mensaje">💬 Mensaje</button>
+        <button class="btn guardar">💾 Guardar</button>
+        <button class="btn reportar">⚠️ Reportar</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

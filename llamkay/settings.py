@@ -38,15 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'trabajo_llamkay',
-    'chat',
-    'idiomas',
-    'legal',
-    'planes',
-    'postulaciones',
-    'reportes',
     'trabajos',
     'usuarios',
-    'zonas',
+    
     
     
 ]
@@ -141,3 +135,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #modelos de apps
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+

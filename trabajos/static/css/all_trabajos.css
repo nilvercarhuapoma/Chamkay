@@ -1,0 +1,82 @@
+body {
+  font-family: sans-serif;
+  background: #f5f5f5;
+  padding: 20px;
+}
+
+.busqueda-filtros input {
+  margin: 5px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.contenedor-trabajos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tarjeta-trabajo {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.imagen-trabajo {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.titulo {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.fecha-publicacion {
+  color: gray;
+  font-size: 0.9em;
+}
+
+.fecha-limite {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #eee;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.8em;
+}
+
+.acciones {
+  margin-top: 15px;
+}
+
+.btn {
+  margin-right: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mensaje {
+  background-color: #4caf50;
+  color: white;
+}
+
+.guardar {
+  background-color: #2196f3;
+  color: white;
+}
+
+.reportar {
+  background-color: #f44336;
+  color: white;
+}
