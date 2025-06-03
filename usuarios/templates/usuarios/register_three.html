@@ -1,0 +1,67 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Crear cuenta de trabajador</title>
+    <link rel="stylesheet" href="{% static 'css/register_three.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Logo" width="40">
+            <h2>TrabajApp</h2>
+        </div>
+        <h1>Crear cuenta de trabajador</h1>
+        <p class="paso">Paso 3 de 3: Perfil Profesional</p>
+
+        <div class="progress-steps">
+            <div class="step filled"></div>
+            <div class="step filled"></div>
+            <div class="step filled"></div>
+        </div>
+
+
+        <div class="form-box">
+            <h2>Perfil Profesional</h2>
+            <p>Cuéntanos sobre tus habilidades</p>
+
+            <form>
+                <label for="habilidades">Habilidades y oficios *</label>
+                <textarea id="habilidades" required></textarea>
+
+                <label for="experiencia">Experiencia</label>
+                <select id="experiencia">
+                    <option value="">Selecciona tu año de experiencia</option>
+                    <option>1 - 3 años</option>
+                    <option>1 año</option>
+                    <option>3 - 5 años</option>
+                    <option>5 + años</option>
+                </select>
+
+                <label for="disponibilidad">Disponibilidad *</label>
+                <select id="disponibilidad" required>
+                    <option value="">Selecciona tu disponibilidad</option>
+                    <option>Solo mañanas</option>
+                    <option>Solo tardes</option>
+                    <option>Todo el día</option>
+                </select>
+
+                <label for="tarifa">Tarifa por hora (opcional)</label>
+                <input type="number" id="tarifa" value="16" />
+
+                <div class="buttons">
+                    <button type="button" class="btn-outline">Anterior</button>
+                    <button type="submit" class="btn-primary">Crear Cuenta</button>
+                </div>
+            </form>
+
+            <p class="login-link">¿Ya tienes una cuenta? <a href="#">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

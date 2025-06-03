@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TrabajApp - Crear cuenta</title>
   <link rel="stylesheet" href="{% static 'css/register_two.css' %}">
+  <script src="{% static 'js/domProvincia.js' %}"></script>
+  <script src="{% static 'js/domDistrito.js' %}"></script>
+
 </head>
 
 <body>
@@ -24,33 +27,42 @@
       </div>
       <form id="location-form" method="post">
         {% csrf_token %}
+
         <label for="direccion">Dirección *</label>
-        <input type="text" id="direccion" placeholder="Tu dirección" required>
+        <input type="text" id="direccion" name="direccion" placeholder="Tu dirección" required>
 
         <label for="departamento">Departamento *</label>
         <select name="departamento" id="departamento" required>
           <option value="">Selecciona tu departamento</option>
           {% for departamento in departamentos %}
-          <option value="{{ departamento.id_ciudad }}">{{ departamento.nombre }}</option>
+          <option value="{{ departamento.id_departamento }}">{{ departamento.nombre }}</option>
           {% endfor %}
         </select>
 
 
-        <label for="departamento"> Departamento</label>
-        <input type="text" id="departamento" placeholder="Tu departamento" required>
+        <label for="provincia">Provincia *</label>
+        <select name="provincia" id="provincia" required>
+          <option value="">Selecciona tu provincia</option>
+          <!-- Aquí se insertarán las provincias vía JavaScript -->
+        </select>
 
-        <label for="provincia"> Provincia</label>
-        <input type="text" id="provincia" placeholder="Tu provincia" required>
+        <label for="distrito">Distrito *</label>
+        <select name="distrito" id="distrito" required>
+          <option value="">Selecciona tu distrito</option>
+          <!-- Aquí se insertarán los distritos vía JavaScript -->
+        </select>
+
 
         <div class="button-group">
           <a href="{% url 'usuarios:register' %}" class="btn-outline">Anterior</a>
           <button type="submit" class="btn-primary">Siguiente</button>
         </div>
       </form>
-      <p class="login-link">¿Ya tienes una cuenta? <a href="usuarios:login">Inicia sesión aquí</a></p>
+      <p class="login-link">¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a></p>
       <a href="#" class="back-link">← Volver al inicio</a>
     </div>
   </main>
 </body>
+
 
 </html>

@@ -10,8 +10,9 @@ class Calle(models.Model):
         db_table = 'calle'
 
 class Distrito(models.Model):
-    id_distrito = models.IntegerField(primary_key=True)
+    id_distrito = models.AutoField(primary_key=True)
     nombre = models.CharField(blank=True, null=True)
+    id_provincia = models.ForeignKey('Provincia', models.DO_NOTHING, db_column='id_provincia', blank=True, null=True)
 
     class Meta:
         managed = False
