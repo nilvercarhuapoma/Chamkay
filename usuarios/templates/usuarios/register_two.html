@@ -1,14 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TrabajApp - Crear cuenta</title>
   <link rel="stylesheet" href="{% static 'css/register_two.css' %}">
 </head>
-
 <body>
   <main class="container">
     <div class="form-box">
@@ -22,35 +20,42 @@
         <div class="step-bar active"></div>
         <div class="step-bar"></div>
       </div>
+
       <form id="location-form" method="post">
         {% csrf_token %}
+        
+        {% if error_message %}
+          <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+
         <label for="direccion">Dirección *</label>
-        <input type="text" id="direccion" placeholder="Tu dirección" required>
+        <input type="text" id="direccion" name="direccion" placeholder="Tu dirección" required>
 
         <label for="departamento">Departamento *</label>
         <select name="departamento" id="departamento" required>
           <option value="">Selecciona tu departamento</option>
           {% for departamento in departamentos %}
-          <option value="{{ departamento.id_ciudad }}">{{ departamento.nombre }}</option>
+            <option value="{{ departamento.id_ciudad }}">{{ departamento.nombre }}</option>
           {% endfor %}
         </select>
 
-
-        <label for="departamento"> Departamento</label>
-        <input type="text" id="departamento" placeholder="Tu departamento" required>
-
-        <label for="provincia"> Provincia</label>
-        <input type="text" id="provincia" placeholder="Tu provincia" required>
+        <label for="provincia">Provincia</label>
+        <select name="provincia" id="provincia">
+          <option value="">Selecciona tu provincia</option>
+          {% for provincia in provincias %}
+            <option value="{{ provincia.id_provincia }}">{{ provincia.nombre }}</option>
+          {% endfor %}
+        </select>
 
         <div class="button-group">
           <a href="{% url 'usuarios:register' %}" class="btn-outline">Anterior</a>
           <button type="submit" class="btn-primary">Siguiente</button>
         </div>
       </form>
-      <p class="login-link">¿Ya tienes una cuenta? <a href="usuarios:login">Inicia sesión aquí</a></p>
-      <a href="#" class="back-link">← Volver al inicio</a>
+
+      <p class="login-link">¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a></p>
+      <a href="{% url 'trabajo_llamkay:home' %}" class="back-link">← Volver al inicio</a>
     </div>
   </main>
 </body>
-
 </html>

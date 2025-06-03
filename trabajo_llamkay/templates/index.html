@@ -1,44 +1,71 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LLamkay</title>
+    <title>Llamkay</title>
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lobster&family=Playwrite+HU:wght@100..400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="navbar">
-            <div class="logo">LLamkay</div>
-            <nav>
-                <a href="#">Nosotros</a>
-                <div class="auth-buttons">
-                    <button class="btn blue">Registrarse</button>
-                    <button class="btn grey">Iniciar sesión</button>
-                 </div>
-            </nav>
-        </div>
-    </header>
+<header>
+    <div class="navbar">
+        <div class="logo">Llamkay</div>
+        <nav>
+            <a href="#">Nosotros</a>
+            <div class="auth-buttons">
+                {% if user.is_authenticated %}
+                    <div class="user-info" onclick="toggleProfileModal(event)" style="cursor:pointer; display: flex; align-items: center;">
+                        {% if user.tipo_usuario == 'empresa' and user.empresa.profile_picture %}
+                            <img src="{{ user.empresa.profile_picture.url }}" alt="Foto empresa" class="profile-pic" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 8px;">
+                        {% elif user.tipo_usuario in 'buscar-trabajo ofrecer-trabajo ambos' and user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Foto perfil" class="profile-pic" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 8px;">
+                        {% else %}
+                            <img src="{% static 'images/acceso.png' %}" alt="Foto por defecto" class="profile-pic" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 8px;">
+                        {% endif %}
 
-    <section class="hero">
-        <img src="{% static 'images/foto-index.jpg' %}" alt="Banner">
-        <div class="hero-text">
-            <h1>Encuentra el trabajo ideal para ti</h1>
-            <p>LLamkay conecta a empleadores con empresas</p>
-            <div class="hero-buttons">
-                <button class="btn blue">Publica un trabajo</button>
-                <button class="btn grey">Aplica para un trabajo</button>
+                        <span>
+                            {% if user.tipo_usuario == 'empresa' %}
+                                {{ user.empresa.nombre_empresa }}
+                            {% else %}
+                                {{ user.nombres }} {{ user.apellidos }}
+                            {% endif %}
+                        </span>
+                    </div>
+                {% else %}
+                    <a class="btn blue" href="{% url 'usuarios:seleccionar_registro' %}">Registrarse</a>
+                    <a class="btn grey" href="{% url 'usuarios:login' %}">Iniciar sesión</a>
+                {% endif %}
             </div>
-        </div>
-    </section>
+        </nav>
+    </div>
+</header>
 
-    <section class="browse">
-        <h2>Busca trabajos por</h2>
-      <div class="tabs" id="tab-options">
+
+<section class="hero">
+    <img src="{% static 'images/foto-index.jpg' %}" alt="Banner">
+    <div class="hero-text">
+        <h1>Encuentra el trabajo ideal para ti</h1>
+        <p>Llamkay conecta a empleadores con empresas</p>
+        <div class="hero-buttons">
+            {% if user.is_authenticated %}
+                <!-- Usuario autenticado -->
+                <a href="{% url 'trabajos:index_trabajo' %}" class="btn blue">Publica un trabajo</a>
+                <a href="{% url 'trabajos:all_trabajos' %}" class="btn grey">Aplica para un trabajo</a>
+            {% else %}
+                <!-- Usuario NO autenticado -->
+                <a href="{% url 'usuarios:login' %}?next={% url 'trabajos:index_trabajo' %}" class="btn blue">Publica un trabajo</a>
+                <a href="{% url 'trabajos:all_trabajos' %}" class="btn grey">Aplica para un trabajo</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="browse">
+    <h2>Busca trabajos por</h2>
+    <div class="tabs" id="tab-options">
         <span class="tab active" data-category="comunidad">Comunidad</span>
         <span class="tab" data-category="ciudad">Ciudad</span>
         <span class="tab" data-category="distrito">Distrito</span>
@@ -58,24 +85,67 @@
                 <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
                 <p>{{ category.name }}</p>
             </div>
-            {% endfor %}
+        {% endfor %}
 
-            {% for category in distrito %}
-                <div class="card distrito hidden">
-                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
-                    <p>{{ category.name }}</p>
-                </div>
-            {% endfor %}
+        {% for category in distrito %}
+            <div class="card distrito hidden">
+                <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                <p>{{ category.name }}</p>
+            </div>
+        {% endfor %}
 
-            {% for category in departamento %}
-                <div class="card departamento hidden">
-                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
-                    <p>{{ category.name }}</p>
-                </div>
-            {% endfor %}
-        </div>
+        {% for category in departamento %}
+            <div class="card departamento hidden">
+                <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                <p>{{ category.name }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
 
-    </section>
-    <script src="{% static 'js/tabs.js' %}"></script>
+{% if user.is_authenticated %}
+<!-- Modal flotante del perfil -->
+<div id="profileModal" class="profile-modal" style="display: none;">
+    <div class="profile-modal-content">
+        <span class="close" onclick="toggleProfileModal(event)">&times;</span>
+        
+         {% if user.tipo_usuario == 'empresa' and user.empresa.profile_picture %}
+            <img src="{{ user.empresa.profile_picture.url }}" alt="Foto de empresa" class="img-fluid rounded-circle" style="width: 100px; border-radius: 50%;">
+        {% elif user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="Foto de perfil" class="img-fluid rounded-circle" style="width: 100px; border-radius: 50%;">
+        {% else %}
+            <img src="{% static 'images/acceso.png' %}" alt="Foto por defecto" class="img-fluid rounded-circle" style="width: 100px; border-radius: 50%;">
+        {% endif %}
+
+        <h4>{{ user.nombres }} {{ user.apellidos }}</h4>
+        <p>{{ user.email }}</p>
+        <p>Rol: {{ user.tipo_usuario }}</p>
+
+        <form action="{% url 'usuarios:logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Cerrar sesión</button>
+        </form>
+
+        {% if user.tipo_usuario in 'buscar-trabajo ofrecer-trabajo ambos' %}
+            <form action="{% url 'usuarios:perfil' %}" method="GET">
+                <button type="submit" class="btn btn-primary">Ver perfil</button>
+            </form>
+        {% elif user.tipo_usuario == 'empresa' %}
+            <form action="{% url 'usuarios:perfil_empresa' %}" method="GET">
+                <button type="submit" class="btn btn-primary">Ver perfil</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<script src="{% static 'js/tabs.js' %}"></script>
+<script>
+    function toggleProfileModal(e) {
+        e.preventDefault();
+        const modal = document.getElementById("profileModal");
+        modal.style.display = (modal.style.display === "block") ? "none" : "block";
+    }
+</script>
 </body>
 </html>

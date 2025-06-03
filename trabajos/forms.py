@@ -1,37 +1,39 @@
 from django import forms
+from .models import OfertaUsuario, OfertaEmpresa
 
-class TrabajoForm(forms.Form):
-    titulo = forms.CharField(
-        max_length=200,
-        label="Título",
-        widget=forms.TextInput(attrs={'placeholder': 'Ingrese el título'})
-    )
-    descripcion = forms.CharField(
-        label="Descripción",
-        widget=forms.Textarea(attrs={'placeholder': 'Descripción del trabajo'})
-    )
-    
-    
-    fecha_limite = forms.DateField(
-        label="Fecha límite",
-        widget=forms.DateInput(attrs={'type': 'date'})
-    )
-    pago = forms.DecimalField(
-        max_digits=10, 
-        decimal_places=2,
-        label="Pago",
-        widget=forms.NumberInput(attrs={'placeholder': 'Monto a pagar(opcional)'})
-    )
-    herramientas = forms.CharField(
-        label="Herramientas",
-        widget=forms.Textarea(attrs={'placeholder': 'Herramientas separadas por comas'})
-    )
-    ESTADO_CHOICES = [
-        ('activa', 'Activa'),
-        ('vencida', 'Vencida'),
-        ('completada', 'Completada'),
-    ]
-    estado = forms.ChoiceField(
-        choices=ESTADO_CHOICES,
-        label="Estado"
-    )
+class OfertaUsuarioForm(forms.ModelForm):
+    class Meta:
+        model = OfertaUsuario
+        exclude = ['empleador', 'estado', 'fecha_registro']
+        widgets = {
+            'horas_limite': forms.TimeInput(format='%H:%M:%S', attrs={'type': 'time'}),
+            'fecha_limite': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+class OfertaEmpresaForm(forms.ModelForm):
+    class Meta:
+        model = OfertaEmpresa
+        fields = [
+            'titulo_puesto',
+            'rango_salarial',
+            'experiencia_requerida',
+            'modalidad_trabajo',
+            'descripcion_puesto',
+            'requisitos_calificaciones',
+            'beneficios_compensaciones',
+            'numero_postulantes',
+            'foto',
+            'fecha_limite',
+            'id_departamento',
+            'id_provincia',
+            'id_distrito',
+            'id_comunidad',
+            'direccion_detalle',
+        ]
+        widgets = {
+            'fecha_limite': forms.DateInput(attrs={'type': 'date'}),
+            'descripcion_puesto': forms.Textarea(attrs={'rows': 3}),
+            'requisitos_calificaciones': forms.Textarea(attrs={'rows': 3}),
+            'beneficios_compensaciones': forms.Textarea(attrs={'rows': 3}),
+            'direccion_detalle': forms.Textarea(attrs={'rows': 2}),
+        }

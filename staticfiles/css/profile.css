@@ -1,0 +1,118 @@
+/* Estilos del perfil */
+body
+{
+background-color: rgb(226, 243, 243);
+
+}
+.profile-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4e8e8;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-header h4 {
+    font-size: 2rem;
+    color: #333;
+}
+
+.profile-header img {
+    width: 150px;  /* Aumento del tamaño de la imagen */
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+.profile-info p {
+    font-size: 1.2rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+.back-to-home {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.back-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+form .form-control {
+    margin-top: 10px;
+    width: 100%;
+}
+
+form button {
+    width: 100%;
+    font-size: 1.2rem;
+    margin-top: 15px;
+}
+
+/* Estilos para la descripción del rol */
+.role-box {
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.role-box p {
+    color: black;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .profile-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .profile-header img {
+        width: 120px; /* Imagen más pequeña en pantallas medianas */
+        height: 120px;
+    }
+
+    .profile-info p {
+        font-size: 1.2rem;
+        color: #555;
+        margin: 5px 0;
+        font-weight: bold; /* Texto en negrita */
+    }
+
+    .back-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+    .role-box {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-header h4 {
+        font-size: 1.5rem;
+    }
+
+    .profile-info p {
+        font-size: 1rem;
+    }
+
+    form button {
+        font-size: 1rem;
+    }
+}

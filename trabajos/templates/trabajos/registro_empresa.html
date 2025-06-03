@@ -6,97 +6,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Oferta Laboral</title>
   <link rel="stylesheet" href="{% static 'css/registro_empresa.css' %}" />
-  <style>
-    .image-preview {
-      margin-top: 10px;
-      max-width: 100%;
-      border-radius: 10px;
-    }
-
-    @media (max-width: 640px) {
-      .form-buttons {
-        flex-direction: column;
-        align-items: stretch;
-      }
-    }
-
-    .btn-volver {
-      background-color: #e5e7eb;
-      color: #111827;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      border: none;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-
-    .btn-volver:hover {
-      background-color: #d1d5db;
-    }
-  </style>
 </head>
 <body>
   <div class="form-container">
-    
-    <!-- Botón Volver -->
-    <a href="{% url 'trabajos:index_trabajo' %}" class="btn-volver">← Volver</a>
+    <a href="{% url 'trabajos:index_trabajo' %}" class="btn-volver">&larr; Volver</a>
 
     <h2>💼 Oferta Laboral</h2>
     <p>Detalles del puesto disponible para primer trabajo</p>
 
-    <form onsubmit="return validarUbicacion();">
-      <label>Título del Puesto *</label>
-      <input type="text" placeholder="Ej: Asistente Administrativo, Trainee de Ventas" required />
+    <form enctype="multipart/form-data" method="POST" onsubmit="return validarUbicacion();">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
 
-      <label>Rango Salarial *</label>
-      <input type="text" placeholder="Ej: $25,000 - $35,000 MXN/mes" required />
+      {{ form.titulo_puesto.label_tag }}
+      {{ form.titulo_puesto }}
 
-      <label>Experiencia Requerida *</label>
-      <select required>
-        <option value="">Nivel de experiencia</option>
-        <option>Sin experiencia</option>
-        <option>1-2 años</option>
-        <option>3-5 años</option>
-        <option>5+ años</option>
+      {{ form.rango_salarial.label_tag }}
+      {{ form.rango_salarial }}
+
+      {{ form.experiencia_requerida.label_tag }}
+      {{ form.experiencia_requerida }}
+
+      {{ form.modalidad_trabajo.label_tag }}
+      {{ form.modalidad_trabajo }}
+
+      {{ form.descripcion_puesto.label_tag }}
+      {{ form.descripcion_puesto }}
+
+      {{ form.requisitos_calificaciones.label_tag }}
+      {{ form.requisitos_calificaciones }}
+
+      {{ form.beneficios_compensaciones.label_tag }}
+      {{ form.beneficios_compensaciones }}
+
+      {{ form.fecha_limite.label_tag }}
+      {{ form.fecha_limite }}
+
+      {{ form.numero_postulantes.label_tag }}
+      {{ form.numero_postulantes }}
+
+      <label for="id_departamento">Departamento *</label>
+      <select id="id_departamento" name="id_departamento" required>
+        <option value="">Seleccione</option>
+        {% for departamento in departamentos %}
+        <option value="{{ departamento.id_departamento }}">{{ departamento.nombre }}</option>
+        {% endfor %}
       </select>
 
-      <label>Modalidad de Trabajo *</label>
-      <select required>
-        <option value="">Seleccione la modalidad</option>
-        <option>Presencial</option>
-        <option>Remoto</option>
-        <option>Híbrido</option>
+      <label for="id_provincia">Provincia</label>
+      <select id="id_provincia" name="id_provincia">
+        <option value="">Seleccione</option>
       </select>
 
-      <label>Descripción del Puesto *</label>
-      <textarea placeholder="Describa las responsabilidades, tareas principales y objetivos del puesto..." required></textarea>
+      <label for="id_distrito">Distrito</label>
+      <select id="id_distrito" name="id_distrito">
+        <option value="">Seleccione</option>
+      </select>
 
-      <label>Requisitos y Calificaciones *</label>
-      <textarea placeholder="Mencione los requisitos educativos, habilidades técnicas y competencias necesarias..." required></textarea>
+      <label for="id_comunidad">Comunidad</label>
+      <select id="id_comunidad" name="id_comunidad">
+        <option value="">Seleccione</option>
+      </select>
 
-      <label>Beneficios y Compensaciones *</label>
-      <textarea placeholder="Describa los beneficios adicionales, prestaciones, oportunidades de crecimiento..." required></textarea>
+      {{ form.direccion_detalle.label_tag }}
+      {{ form.direccion_detalle }}
 
-      <label>Fecha Límite de Postulación *</label>
-      <input type="date" required />
-
-      <label>Número de Postulantes Esperado</label>
-      <input type="number" min="1" placeholder="Ej: 10" />
-
-      <label>Ubicación (al menos uno requerido) *</label>
-      <input type="text" id="departamento" placeholder="Departamento" />
-      <input type="text" id="ciudad" placeholder="Ciudad" />
-      <input type="text" id="distrito" placeholder="Distrito" />
-      <input type="text" id="comunidad" placeholder="Comunidad" />
-
-      <label>Descripción de la Dirección (Opcional)</label>
-      <input type="text" placeholder="Describa la ubicación del lugar de trabajo" />
-
-      <label>Imagen del Puesto (Opcional)</label>
-      <input type="file" accept="image/*" onchange="previewImage(event)" />
+      {{ form.foto.label_tag }}
+      {{ form.foto }}
       <img id="preview" class="image-preview" style="display:none" />
 
       <div class="form-buttons">
@@ -108,13 +84,12 @@
 
   <script>
     function validarUbicacion() {
-      const departamento = document.getElementById('departamento').value.trim();
-      const ciudad = document.getElementById('ciudad').value.trim();
-      const distrito = document.getElementById('distrito').value.trim();
-      const comunidad = document.getElementById('comunidad').value.trim();
-
-      if (!departamento && !ciudad && !distrito && !comunidad) {
-        alert("Debe completar al menos uno de los campos de ubicación (Departamento, Ciudad, Distrito o Comunidad).");
+      const departamento = document.getElementById('id_departamento').value;
+      const provincia = document.getElementById('id_provincia').value;
+      const distrito = document.getElementById('id_distrito').value;
+      const comunidad = document.getElementById('id_comunidad').value;
+      if (!departamento && !provincia && !distrito && !comunidad) {
+        alert("Debe completar al menos uno de los campos de ubicación.");
         return false;
       }
       return true;
@@ -130,7 +105,49 @@
           preview.style.display = 'block';
         };
         reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+        preview.src = '';
       }
+    }
+
+    document.getElementById('id_departamento').addEventListener('change', function() {
+      const deptId = this.value;
+      fetch(`/trabajos/ajax/provincias/?id_departamento=${deptId}`)
+        .then(res => res.json())
+        .then(data => {
+          const provinciaSelect = document.getElementById('id_provincia');
+          provinciaSelect.innerHTML = '<option value="">Seleccione</option>';
+          data.forEach(p => provinciaSelect.innerHTML += `<option value="${p.id_provincia}">${p.nombre}</option>`);
+        });
+    });
+
+    document.getElementById('id_provincia').addEventListener('change', function() {
+      const provId = this.value;
+      fetch(`/trabajos/ajax/distritos/?id_provincia=${provId}`)
+        .then(res => res.json())
+        .then(data => {
+          const distritoSelect = document.getElementById('id_distrito');
+          distritoSelect.innerHTML = '<option value="">Seleccione</option>';
+          data.forEach(p => distritoSelect.innerHTML += `<option value="${p.id_distrito}">${p.nombre}</option>`);
+        });
+    });
+
+    document.getElementById('id_distrito').addEventListener('change', function() {
+      const distId = this.value;
+      fetch(`/trabajos/ajax/comunidades/?id_distrito=${distId}`)
+        .then(res => res.json())
+        .then(data => {
+          const comunidadSelect = document.getElementById('id_comunidad');
+          comunidadSelect.innerHTML = '<option value="">Seleccione</option>';
+          data.forEach(p => comunidadSelect.innerHTML += `<option value="${p.id_comunidad}">${p.nombre}</option>`);
+        });
+    });
+
+    // Activar preview si ya existe input con ID
+    const fotoInput = document.getElementById('id_foto');
+    if (fotoInput) {
+      fotoInput.addEventListener('change', previewImage);
     }
   </script>
 </body>

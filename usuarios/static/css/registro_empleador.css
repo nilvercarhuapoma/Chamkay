@@ -1,0 +1,106 @@
+/* reset box-sizing */
+* {
+  box-sizing: border-box;
+}
+
+/* body centrado con fondo degradado */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #f0f4ff, #e6f0ff);
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* contenedor principal del formulario */
+.fondo {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  padding: 2.5rem 2rem;
+}
+
+/* contenedor contenido extra (puedes usarlo si quieres) */
+.contenido {
+  display: flex;
+  flex-direction: column;
+}
+
+/* titulo */
+h2 {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  color: #0056ff;
+  font-size: 1.8rem;
+}
+
+/* enlace volver */
+.volver {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: #0056ff;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+.volver:hover {
+  color: #003cbf;
+}
+
+/* inputs estilo */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1.5px solid #ccc;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #0056ff;
+  outline: none;
+}
+
+/* botón */
+.btn-verde {
+  width: 100%;
+  padding: 0.75rem 0;
+  background-color: #0056ff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-verde:hover {
+  background-color: #003cbf;
+}
+
+/* responsive */
+@media (max-width: 480px) {
+  .fondo {
+    padding: 2rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}

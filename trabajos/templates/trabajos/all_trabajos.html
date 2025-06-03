@@ -2,50 +2,106 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Trabajos Publicados</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Trabajos</title>
   <link rel="stylesheet" href="{% static 'css/all_trabajos.css' %}">
 </head>
 <body>
-  <div class="busqueda-filtros">
-    <input type="text" placeholder="Buscar por Departamento" id="buscar-departamento">
-    <input type="text" placeholder="Buscar por Ciudad" id="buscar-ciudad">
-    <input type="text" placeholder="Buscar por Distrito" id="buscar-distrito">
-    <input type="text" placeholder="Buscar por Comunidad" id="buscar-comunidad">
-    
+
+<div class="container">
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <a href="{% url 'trabajo_llamkay:home' %}" class="icono-inicio">
+      <img src="{% static 'images/iconinicio.png' %}" alt="Inicio" />
+    </a>
+
+    <div class="search-box">
+      <input type="text" placeholder="Buscar trabajos..." />
+      <img src="{% static 'images/lupa.png' %}" alt="Buscar" />
+    </div>
+
+    <select class="filter-select">
+      <option>Ordenar por</option>
+      <option value="urgentes">Urgentes</option>
+      <option value="pendientes">Pendientes</option>
+      <option value="temporales">Temporales</option>
+    </select>
   </div>
 
-  <div class="contenedor-trabajos">
+  <!-- FILTROS -->
+  <div class="filtros">
+    <span>Departamento</span>
+    <span>Ciudad</span>
+    <span>Distrito</span>
+    <span>Comunidad</span>
+  </div>
+
+  <!-- TRABAJOS -->
+  <div class="trabajos-grid">
     {% for trabajo in trabajos %}
-    <div class="tarjeta-trabajo">
-      <h3 class="titulo">{{ trabajo.titulo }}</h3>
-      {% if trabajo.imagen %}
-        <img src="{{ trabajo.imagen.url }}" alt="Imagen del trabajo" class="imagen-trabajo">
-      {% endif %}
-      <p class="fecha-publicacion">Publicado: {{ trabajo.fecha_publicacion|date:"d M Y" }}</p>
+      <div class="tarjeta-trabajo">
+        <!-- Título -->
+        <h3>{{ trabajo.titulo }}</h3>
 
-      <div class="contenido-trabajo">
-        <p><strong>Descripción:</strong> {{ trabajo.descripcion }}</p>
-        <p><strong>Herramientas:</strong> {{ trabajo.herramientas }}</p>
-        <p><strong>Dirección:</strong>
-          {{ trabajo.departamento }},
-          {{ trabajo.ciudad }},
-          {{ trabajo.distrito }},
-          {{ trabajo.comunidad }}
-          
-        </p>
-        <p class="fecha-limite">
-          <strong>Fecha Límite:</strong> {{ trabajo.fecha_limite }} {{ trabajo.hora_limite }}
-        </p>
-      </div>
+        <p class="fecha-publicacion">Publicado: {{ trabajo.fecha_registro|date:"d M Y" }}</p>
 
-      <div class="acciones">
-        <button class="btn mensaje">💬 Mensaje</button>
-        <button class="btn guardar">💾 Guardar</button>
-        <button class="btn reportar">⚠️ Reportar</button>
+        {% if trabajo.foto %}
+          <img src="{{ trabajo.foto.url }}" alt="Imagen del trabajo" class="imagen-trabajo" />
+        {% endif %}
+
+        <div class="contenido-trabajo">
+          <!-- Descripción -->
+          {% if trabajo.descripcion %}
+            <p><strong>Descripción:</strong><br>{{ trabajo.descripcion }}</p>
+          {% endif %}
+
+          <!-- Herramientas o requisitos -->
+          {% if trabajo.herramientas %}
+            <p><strong>Herramientas:</strong><br>{{ trabajo.herramientas }}</p>
+          {% else %}
+            <p><strong>Experiencia:</strong> {{ trabajo.experiencia_requerida }}</p>
+            <p><strong>Modalidad:</strong> {{ trabajo.modalidad_trabajo }}</p>
+            <p><strong>Requisitos:</strong> {{ trabajo.requisitos_calificaciones }}</p>
+            <p><strong>Beneficios:</strong> {{ trabajo.beneficios_compensaciones }}</p>
+          {% endif %}
+
+          <!-- Dirección -->
+          <p><strong>Dirección:</strong>
+            {% if trabajo.id_departamento %}{{ trabajo.id_departamento.nombre }}, {% endif %}
+            {% if trabajo.id_provincia %}{{ trabajo.id_provincia.nombre }}, {% endif %}
+            {% if trabajo.id_distrito %}{{ trabajo.id_distrito.nombre }}, {% endif %}
+            {% if trabajo.id_comunidad %}{{ trabajo.id_comunidad.nombre }}{% endif %}
+          </p>
+
+          <!-- Pago o Rango Salarial -->
+          {% if trabajo.pago %}
+            <p><strong>Pago:</strong> S/ {{ trabajo.pago }}</p>
+          {% elif trabajo.rango_salarial %}
+            <p><strong>Rango Salarial:</strong> {{ trabajo.rango_salarial }}</p>
+          {% endif %}
+
+          <!-- Fecha límite -->
+          <p><strong>Fecha Límite:</strong> {{ trabajo.fecha_limite }}
+            {% if trabajo.horas_limite %} {{ trabajo.horas_limite }} {% endif %}
+          </p>
+
+          <!-- Postulantes -->
+          {% if trabajo.numero_postulantes %}
+            <p><strong>Postulantes:</strong> {{ trabajo.numero_postulantes }}</p>
+          {% endif %}
+
+          <!-- Botón -->
+          <a href="#" class="boton-contactar">Contactar</a>
+        </div>
       </div>
-    </div>
+    {% empty %}
+      <p>No hay trabajos disponibles.</p>
     {% endfor %}
   </div>
+
+</div>
+
 </body>
 </html>

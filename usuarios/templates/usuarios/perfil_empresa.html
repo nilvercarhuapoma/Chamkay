@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Empresa</title>
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+    <script>
+        function closeProfilePage() {
+            window.location.href = "{% url 'trabajo_llamkay:home' %}";
+        }
+    </script>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="back-to-home">
+            <a href="{% url 'trabajo_llamkay:home' %}">
+                <img src="{% static 'images/iconinicio.png' %}" alt="Inicio" class="back-icon">
+            </a>
+        </div>
+
+        <div class="profile-header text-center">
+            <h4>¡Bienvenido, {{ empresa.nombre_empresa }}!</h4>
+
+            <!-- Imagen de perfil de empresa con fallback a imagen por defecto -->
+            <img src="{% if empresa.profile_picture %}{{ empresa.profile_picture.url }}{% else %}{% static 'images/acceso.png' %}{% endif %}"
+                 alt="Logo Empresa"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; border-radius: 50%; border: 2px solid #bbb;">
+        </div>
+
+        <!-- Formulario para actualizar logo -->
+        <form action="{% url 'usuarios:actualizar_foto_empresa' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="profile_picture">Cambiar logo de empresa:</label>
+            <input type="file" name="profile_picture" id="profile_picture" accept="image/*" class="form-control">
+            <button type="submit" class="btn btn-primary mt-2">Actualizar logo</button>
+        </form>
+
+        <div class="profile-info mt-3">
+            <p><strong>RUC:</strong> {{ empresa.ruc }}</p>
+            <p><strong>Email:</strong> {{ empresa.email_empresa }}</p>
+            <p><strong>Teléfono:</strong> {{ empresa.telefono }}</p>
+            <p><strong>Dirección:</strong> {{ empresa.direccion }}</p>
+            <p><strong>Fecha de registro:</strong> {{ empresa.fecha_registro|date:"d/m/Y H:i" }}</p>
+        </div>
+
+        <div class="role-description mt-3">
+            <div class="role-box" style="background-color: #ffd966; color: black;">
+                <p>Esta cuenta está registrada como una <strong>empresa empleadora</strong>. Puedes publicar ofertas de trabajo y gestionar postulantes.</p>
+            </div>
+        </div>
+
+        <form action="{% url 'usuarios:logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger mt-3">Cerrar sesión</button>
+        </form>
+    </div>
+</body>
+</html>

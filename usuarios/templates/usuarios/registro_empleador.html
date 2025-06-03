@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Empleador</title>
+    <link rel="stylesheet" href="{% static 'css/registro_empleador.css' %}">
+</head>
+<body>
+    <div class="fondo">
+        <div class="contenido">
+            <div class="principal">
+                
+                <div class="formulario-registro">
+                    <a href="{% url 'trabajo_llamkay:home' %}" class="volver">&lt; Volver</a>
+
+                    <h2>Registra tu empresa</h2>
+                    
+                    <form id="form_empresa" method="post" style="margin-top: 20px;">
+                        
+                        {% csrf_token %}
+                        <input type="text" name="nombre_empresa" placeholder="Nombre de la empresa" required>
+                        <input type="text" name="ruc" placeholder="RUC" required>
+                        <input type="text" name="direccion" placeholder="Dirección" required>
+                        <input type="tel" name="telefono" placeholder="Teléfono" required>
+                        <input type="email" name="correo" placeholder="Correo electrónico" required>
+                        <input type="password" name="contrasena" placeholder="Contraseña" required>
+                        <input type="password" name="confirmar_contrasena" placeholder="Confirmar contraseña" required>
+                        <button type="submit" class="btn btn-verde">Crear cuenta</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

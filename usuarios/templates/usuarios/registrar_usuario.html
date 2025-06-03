@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" href="{% static 'css/bienvenida.css' %}">
+</head>
+<body>
+    <div class="fondo">
+        <div class="contenido">
+            <div class="principal">
+                <div class="imagen-derecha">
+                    <img src="{% static 'img/logo.png' %}" alt="Logo">
+                </div>
+                <div class="formulario-registro">
+                    <a href="{% url 'usuarios:home' %}" class="volver">&lt; Volver</a>
+
+                    <h2>Crear Usuario</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="text" name="nombre" placeholder="Nombre" required>
+                        <input type="text" name="apellido" placeholder="Apellido" required>
+                        <input type="date" name="fecha_nacimiento" placeholder="Fecha de nacimiento" required>
+                        <input type="text" name="documento" placeholder="Documento de identidad (DNI, CI, etc.)" required>
+                        <input type="tel" name="telefono" placeholder="Número telefónico" required>
+                        <input type="email" name="correo" placeholder="Correo electrónico" required>
+                        <input type="password" name="contrasena" placeholder="Contraseña" required>
+                        <input type="password" name="confirmar_contrasena" placeholder="Confirmar contraseña" required>
+                        <button type="submit" class="btn btn-verde">Crear cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

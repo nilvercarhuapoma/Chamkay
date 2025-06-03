@@ -1,0 +1,90 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: sans-serif;
+}
+
+
+
+/*  REGISTRO_USUARIO.HTML  
+    INICIAR_SESION.HTML
+----------------------------*/
+
+
+.formulario-registro {
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    min-width: 300px;
+    max-width: 400px;
+    width: 100%;
+    height: 565px;
+    color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formulario-inicio-sesion {
+    height: 290px;
+}
+
+.formulario-registro h2 {
+    margin: 20px 0 0 0;
+    font-size: 28px;
+    text-align: center;
+    color: white;
+}
+
+.formulario-registro input {
+    padding: 12px;
+    margin: 6px 0;
+    width: 93%;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    color: #333;
+}
+
+.formulario-registro input:focus {
+    outline: none;
+    box-shadow: 0 0 5px #00cc66;
+}
+
+.btn-verde {
+    background-color: #00cc66;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 18px 0;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+    position: relative;
+    left: 35%;
+
+}
+
+.btn-verde:hover {
+    background-color: #00994d;
+}
+
+.volver {
+    position: absolute;
+    
+    color: white;
+    font-size: 16px;
+    margin-bottom: 0px 0 0 0px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}

@@ -96,3 +96,20 @@ h1 {
     color: #3b82f6;
     text-decoration: none;
 }
+.inicio {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+}
+
+.icono-inicio {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.icono-inicio:hover {
+    transform: scale(1.2);
+}

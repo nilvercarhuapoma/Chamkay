@@ -1,0 +1,134 @@
+body.fondo {
+    background-color: #ebf8ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.formulario {
+    max-width: 800px;
+    margin: auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #047857;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.fila {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.fila > div {
+    flex: 1;
+}
+
+.campo {
+    margin-bottom: 1rem;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: #374151;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.hora-limite {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.hora-limite select {
+    flex: 1;
+    min-width: 60px;
+}
+
+.direccion input,
+.direccion textarea {
+    margin-bottom: 0.8rem;
+}
+
+.foto-opcional {
+    border: 1px dashed #ccc;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+button {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #1e40af;
+}
+
+.volver button {
+    background-color: #e5e7eb;
+    color: black;
+    margin-bottom: 1rem;
+}
+
+#previewImagen {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+/* Ya tienes esto definido, pero agrega esto al final del archivo: */
+
+@media (min-width: 600px) {
+    .fila {
+        flex-direction: row;
+    }
+
+    .hora-limite {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 599px) {
+    .hora-limite {
+        flex-direction: column;
+    }
+
+    .hora-limite input {
+        width: 100%;
+    }
+}

@@ -1,6 +1,5 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -27,18 +26,24 @@
         </div>
 
         <label for="email">Correo electrónico</label>
-        <input type="email" id="email" placeholder="tu@email.com" required>
+        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
 
         <label for="password">Contraseña</label>
         <div class="password-container">
-          <input type="password" id="password" required>
-        <!-- <span class="toggle-password">👁️</span> -->
+          <input type="password" id="password" name="password" required>
+          <!-- <span class="toggle-password">👁️</span> -->
         </div>
 
         <div class="options">
-          <label><input type="checkbox"> Recordarme</label>
+          <label><input type="checkbox" name="remember"> Recordarme</label>
+
           <a href="#">¿Olvidaste tu contraseña?</a>
         </div>
+
+        <!-- Mensaje de error -->
+        {% if error_message %}
+          <p style="color: red; margin-bottom: 1em;">{{ error_message }}</p>
+        {% endif %}
 
         <button type="submit" class="btn-primary">Iniciar Sesión</button>
       </form>
@@ -50,8 +55,8 @@
         <button class="btn-demo">Demo: Administrador</button>
       </div>
 
-      <p class="register">¿No tienes una cuenta? <a href="{% url 'usuarios:register' %}">Regístrate aquí</a></p>
-      <a href="#" class="back">← Volver al inicio</a>
+      <p class="register">¿No tienes una cuenta? <a href="{% url 'usuarios:seleccionar_registro' %}">Regístrate aquí</a></p>
+      <a href="{% url 'trabajo_llamkay:home' %}" class="back">← Volver al inicio</a>
     </div>
   </div>
 </body>

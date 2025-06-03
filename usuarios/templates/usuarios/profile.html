@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+
+    <script>
+        function closeProfilePage() {
+            window.location.href = "{% url 'trabajo_llamkay:home' %}";
+        }
+    </script>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="back-to-home">
+            <a href="{% url 'trabajo_llamkay:home' %}">
+                <img src="{% static 'images/iconinicio.png' %}" alt="Inicio" class="back-icon">
+            </a>
+        </div>
+
+        <div class="profile-header text-center">
+            <h4>¡Bienvenido, {{ request.user.nombres }}!</h4>
+
+            <img src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'images/acceso.png' %}{% endif %}" alt="Foto de perfil" class="img-fluid rounded-circle" style="width: 120px; border-radius: 50%;">
+        </div>
+
+        <form action="{% url 'usuarios:actualizar_foto' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="profile_picture">Cambiar foto de perfil:</label>
+            <input type="file" name="profile_picture" id="profile_picture" accept="image/*" class="form-control">
+            <button type="submit" class="btn btn-primary mt-2">Actualizar foto</button>
+        </form>
+
+        <div class="profile-info mt-3">
+            <p><strong>Nombre:</strong> {{ request.user.nombres }} {{ request.user.apellidos }}</p>
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+            <p><strong>Teléfono:</strong> {{ request.user.telefono }}</p>
+            <p><strong>Rol:</strong> {{ request.user.tipo_usuario }}</p>
+        </div>
+
+        <div class="role-description mt-3">
+            {% if request.user.tipo_usuario == 'dar-trabajo' %}
+                <div class="role-box" style="background-color: #4CAF50; color: black;">
+                    <p>¡Tu rol es de dar trabajo! Puedes ofrecer empleos y conseguir personas interesadas fácilmente.</p>
+                </div>
+            {% elif request.user.tipo_usuario == 'buscar-trabajo' %}
+                <div class="role-box" style="background-color: #2196F3; color: black;">
+                    <p>¡Hola, {{ request.user.nombres }}! Tu rol es buscar oportunidades laborales y contactar a empleadores.</p>
+                </div>
+            {% else %}
+                <div class="role-box" style="background-color: #f0ad4e; color: black;">
+                    <p>Tu rol aún no está definido.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <form action="{% url 'usuarios:logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger mt-3">Cerrar sesión</button>
+        </form>
+    </div>
+</body>
+</html>
