@@ -1,0 +1,188 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLamkay.pe - Mi Perfil</title>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lobster&family=Playwrite+HU:wght@100..400&display=swap" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="{% static 'js/perfil.js' %}" defer></script>
+    <script src="{% static 'js/guardarPerfil.js' %}" defer></script>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">LLamkay.pe</div>
+            <a href="{% url 'usuarios:dashboard' %}" class="back-link">← Volver al Dashboard</a>
+        </nav>
+    </header>
+
+    <!-- MODAL: Editar perfil -->
+    <div class="edit-profile-modal" id="editProfileModal" style="display: none;">
+        <form method="POST" enctype="multipart/form-data" id="form-editar-perfil">
+            {% csrf_token %}
+            <h2>Editar Perfil</h2>
+
+            <label for="foto">Foto de perfil:</label>
+            <input type="file" name="foto" id="foto">
+
+            <label for="nombres">Nombres:</label>
+            <input type="text" name="nombres" id="nombres" value="{{ usuario.nombres }}" required>
+
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" name="apellidos" id="apellidos" value="{{ usuario.apellidos }}" required>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" name="telefono" id="telefono" value="{{ usuario.telefono }}">
+
+            <label for="descripcion">Descripción:</label>
+            <textarea name="descripcion" id="descripcion">{{ profile.bio }}</textarea>
+
+            <label for="disponibilidad">Disponibilidad:</label>
+            <input type="text" name="disponibilidad" id="disponibilidad" value="{{ profile.disponibilidad }}">
+
+            <label for="precio_hora">Precio por hora (S/):</label>
+            <input type="number" name="precio_hora" id="precio_hora" step="0.01" value="{{ profile.precio_hora }}">
+
+            <div class="modal-buttons">
+                <button type="submit">Guardar cambios</button>
+                <button type="button" onclick="cerrarModalEdicion()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container">
+        <!-- Encabezado de perfil -->
+        <div class="profile-header">
+            <div class="profile-hero">
+                <div class="profile-avatar">
+                    {% if profile.foto_url %}
+                        <img src="{{ profile.foto_url.url }}" alt="Foto de perfil" class="profile-photo" />
+                    {% else %}
+                        <span class="initials">{{ usuario.nombres|slice:":1" }}{{ usuario.apellidos|slice:":1" }}</span>
+                    {% endif %}
+                    <div class="profile-status"></div>
+                </div>
+
+                <div class="profile-info">
+                    <h1>{{ usuario.nombres }} {{ usuario.apellidos }}</h1>
+                    <p>📧 {{ usuario.email }}</p>
+                    <p>📍 
+                        {% if usuario.id_distrito %}{{ usuario.id_distrito.nombre }}{% else %}Distrito no especificado{% endif %},
+                        {% if usuario.id_provincia %}{{ usuario.id_provincia.nombre }}{% else %}Provincia no especificada{% endif %}
+                    </p>
+                    <p>🗕️ Miembro desde {{ usuario.fecha_creacion|date:"F Y" }}</p>
+
+                    <div class="profile-badges">
+                        <div class="profile-badge badge-verified">✅ Perfil Verificado</div>
+                        <div class="profile-badge">⭐ Trabajadora Confiable</div>
+                        <div class="profile-badge">💪 Disponible Inmediato</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <button class="btn btn-primary" onclick="editProfile()">✏️ Editar Perfil</button>
+                <a href="#" class="btn btn-secondary">📋 Ver Referencias</a>
+                <a href="#" class="btn btn-secondary">📱 Compartir WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('general')">📊 General</button>
+            <button class="tab" onclick="showTab('skills')">🚰 Servicios</button>
+            <button class="tab" onclick="showTab('portfolio')">📸 Trabajos</button>
+            <button class="tab" onclick="showTab('history')">📋 Historial</button>
+        </div>
+
+        <!-- CONTENIDO GENERAL -->
+        <div id="general" class="tab-content active">
+            <div class="cards-grid">
+
+                <!-- Información Personal -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon">👤</div>
+                            <h2 class="card-title">Información Personal</h2>
+                        </div>
+                        <a href="#" class="card-action">Editar</a>
+                    </div>
+                    <div class="info-item"><span class="info-label">Nombre completo:</span><span class="info-value">{{ usuario.nombres }} {{ usuario.apellidos }}</span></div>
+                    <div class="info-item"><span class="info-label">Teléfono:</span><span class="info-value">{{ usuario.telefono|default:"No especificado" }}</span></div>
+                    <div class="info-item"><span class="info-label">Distrito:</span><span class="info-value">{% if usuario.id_distrito %}{{ usuario.id_distrito.nombre }}{% else %}No especificado{% endif %}</span></div>
+                    <div class="info-item"><span class="info-label">Disponibilidad:</span><span class="info-value">{{ profile.disponibilidad|default:"No especificada" }}</span></div>
+                    <div class="info-item"><span class="info-label">Precio por hora (S/):</span>
+                        <span class="info-value">
+                            {% if profile.precio_hora %}S/ {{ profile.precio_hora|floatformat:2 }}{% else %}No especificado{% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Rendimiento -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon">📊</div>
+                            <h2 class="card-title">Mi Rendimiento</h2>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-number">{{ estadisticas.trabajos_realizados }}</div><div class="stat-label">Trabajos Realizados</div></div>
+                        <div class="stat-card"><div class="stat-number">{{ estadisticas.trabajos_activos }}</div><div class="stat-label">Trabajos Activos</div></div>
+                        <div class="stat-card"><div class="stat-number">{{ estadisticas.trabajos_completados }}</div><div class="stat-label">Trabajos Completados</div></div>
+                        <div class="stat-card"><div class="stat-number">{{ estadisticas.calificacion }}</div><div class="stat-label">Calificación</div></div>
+                        <div class="stat-card"><div class="stat-number">{{ estadisticas.porcentaje_satisfechos }}%</div><div class="stat-label">Clientes Satisfechos</div></div>
+                        <div class="stat-card"><div class="stat-number">S/ {{ estadisticas.ingresos_mes }}</div><div class="stat-label">Ingresos del Mes</div></div>
+                    </div>
+                </div>
+
+                <!-- Sobre Mí -->
+                <div class="card" style="grid-column: 1/-1;">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon">💬</div>
+                            <h2 class="card-title">Sobre Mí</h2>
+                        </div>
+                        <a href="#" class="card-action">Editar</a>
+                    </div>
+                    <p style="line-height: 1.6; color: #666;">
+                        {{ profile.bio|default:"Sin descripción aún." }}
+                    </p>
+                </div>
+
+                <!-- Actividad Reciente -->
+                <div class="card" style="grid-column: 1/-1;">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon">⚡</div>
+                            <h2 class="card-title">Actividad Reciente</h2>
+                        </div>
+                        <a href="#" class="card-action">Ver todo</a>
+                    </div>
+                    {% for actividad in actividades %}
+                        <div class="info-item">
+                            <span class="info-label">{{ actividad.icono }} {{ actividad.descripcion }}</span>
+                            <span class="info-value">{{ actividad.fecha|timesince }} atrás</span>
+                        </div>
+                    {% empty %}
+                        <p>No hay actividad reciente.</p>
+                    {% endfor %}
+                </div>
+
+            </div> <!-- cards-grid -->
+        </div> <!-- #general -->
+    </div> <!-- .container -->
+</body>
+</html>

@@ -1,0 +1,249 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLamkay.pe - Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lobster&family=Playwrite+HU:wght@100..400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dropdown-overlay" id="dropdownOverlay"></div>
+    
+    <header>
+        <nav class="navbar">
+            <div class="logo">LLamkay.pe</div>
+            
+            <div class="navbar-center">
+                <a href="#">Nosotros</a>
+                <a href="#">Trabajos</a>
+                <a href="#">Empresas</a>
+            </div>
+            
+            <div class="navbar-right">
+                <!-- Botón de notificaciones -->
+                <div style="position: relative;">
+                    <button class="icon-button" id="notificationsBtn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                        </svg>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="dropdown notifications-dropdown" id="notificationsDropdown">
+                        <div class="dropdown-header">Notificaciones</div>
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">JD</div>
+                            <div class="notification-content">
+                                <div class="notification-text">Juan Díaz aplicó para tu trabajo de carpintería</div>
+                                <div class="notification-time">hace 5 minutos</div>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">MA</div>
+                            <div class="notification-content">
+                                <div class="notification-text">María Ayala publicó un nuevo trabajo en tu área</div>
+                                <div class="notification-time">hace 2 horas</div>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-avatar">CS</div>
+                            <div class="notification-content">
+                                <div class="notification-text">Carlos Silva aceptó tu propuesta de trabajo</div>
+                                <div class="notification-time">ayer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón de mensajes -->
+                <div style="position: relative;">
+                    <button class="icon-button" id="messagesBtn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                        </svg>
+                        <span class="notification-badge">1</span>
+                    </button>
+                    
+                    <div class="dropdown messages-dropdown" id="messagesDropdown">
+                        <div class="dropdown-header">Mensajes</div>
+                        <div class="message-item">
+                            <div class="message-avatar">AB</div>
+                            <div class="message-content">
+                                <div class="message-name">Ana Bravo</div>
+                                <div class="message-preview">Hola, estoy interesada en el trabajo...</div>
+                            </div>
+                            <div class="message-time">10m</div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">LM</div>
+                            <div class="message-content">
+                                <div class="message-name">Luis Mendoza</div>
+                                <div class="message-preview">¿Cuándo podemos coordinar?</div>
+                            </div>
+                            <div class="message-time">1h</div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">RC</div>
+                            <div class="message-content">
+                                <div class="message-name">Rosa Castillo</div>
+                                <div class="message-preview">Gracias por la oportunidad</div>
+                            </div>
+                            <div class="message-time">2d</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección corregida del menú de usuario en dashboard.html -->
+<div style="position: relative;">
+    <div class="user-menu" id="userMenuBtn">
+        <!-- Verificar que existe la imagen del perfil -->
+        {% if user.profile.foto %}
+            <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="profile-pic">
+        {% else %}
+            <!-- Mostrar iniciales si no hay foto -->
+            <div class="profile-pic-placeholder">
+                {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+            </div>
+        {% endif %}
+        <span class="username">{{ user.first_name|default:user.username }}</span>
+        <div class="dropdown-arrow"></div>
+    </div>
+    
+    <div class="dropdown user-dropdown" id="userDropdown">
+        <div class="user-profile-section">
+            {% if user.profile.foto %}
+                <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="user-profile-pic">
+            {% else %}
+                <div class="user-profile-pic-placeholder">
+                    {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                </div>
+            {% endif %}
+            <div class="user-profile-info">
+                <h3>{{ user.first_name|default:user.username }} {{ user.last_name }}</h3>
+                <p>Ver todos los perfiles</p>
+            </div>
+        </div>
+        
+                        <!-- ENLACE CORREGIDO AL PERFIL -->
+                        <a href="{% url 'usuarios:perfil' %}" class="dropdown-menu-item">
+                            <div class="dropdown-icon">
+                                <img src="{% static 'images/perfil.png' %}" alt="Usuario" class="icon">
+                            </div>
+                            Perfil
+                        </a>
+                        
+                        <a href="{% url 'usuarios:configuracion' %}" class="dropdown-menu-item">
+                            <div class="dropdown-icon">
+                                <img src="{% static 'images/configuracion.png' %}" alt="Configuración" class="icon">
+                            </div>
+                            Configuración y privacidad
+                        </a>
+                        
+                        <a href="{% url 'usuarios:ayuda' %}" class="dropdown-menu-item">
+                            <div class="dropdown-icon">
+                                <img src="{% static 'images/ayuda-soporte.png' %}" alt="Ayuda" class="icon">
+                            </div>
+                            Ayuda y soporte técnico
+                        </a>
+                        
+                        <a href="{% url 'usuarios:accesibilidad' %}" class="dropdown-menu-item">
+                            <div class="dropdown-icon">
+                                <img src="{% static 'images/accesibilidad.png' %}" alt="Accesibilidad" class="icon">
+                            </div>
+                            Pantalla y accesibilidad
+                        </a>
+                        
+                        <a href="{% url 'usuarios:comentarios' %}" class="dropdown-menu-item">
+                            <div class="dropdown-icon">
+                                <img src="{% static 'images/comentarios.png' %}" alt="Comentarios" class="icon">
+                            </div>
+                            Enviar comentarios
+                        </a>
+                        
+                        <a href="{% url 'usuarios:logout' %}" class="dropdown-menu-item logout">
+                            <div class="dropdown-icon">
+                                <img src="{% static 'images/cerrar-sesion.png' %}" alt="Cerrar sesión" class="icon">
+                            </div>
+                            Cerrar sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="carousel">
+            <img class="carousel-image active" src="{% static 'images/foto-index-1.jpg' %}" alt="Imagen 1">
+            <img class="carousel-image" src="{% static 'images/foto-index-2.jpg' %}" alt="Imagen 2">
+            <img class="carousel-image" src="{% static 'images/foto-index-3.jpg' %}" alt="Imagen 3">
+            <img class="carousel-image" src="{% static 'images/foto-index-4.jpg' %}" alt="Imagen 4">
+
+            <button class="carousel-btn prev" onclick="cambiarImagen(-1)">❮</button>
+            <button class="carousel-btn next" onclick="cambiarImagen(1)">❯</button>
+        </div>
+
+        <div class="hero-text">
+            <h1>Encuentra el trabajo ideal para ti</h1>
+            <p>LLamkay conecta a empleadores con empresas</p>
+            <div class="hero-buttons">
+                <button class="btn blue">Publica un trabajo</button>
+                <button class="btn grey">Aplica para un trabajo</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="browse">
+        <h2>Busca trabajos por</h2>
+        <div class="tabs" id="tab-options">
+            <span class="tab active" data-category="comunidad">Comunidad</span>
+            <span class="tab" data-category="ciudad">Ciudad</span>
+            <span class="tab" data-category="distrito">Distrito</span>
+            <span class="tab" data-category="departamento">Departamento</span>
+        </div>
+
+        <div class="cards-container" id="cards-container">
+            {% for category in comunidad %}
+                <div class="card comunidad">
+                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                    <p class="name">{{ category.name }}</p>
+                    <p class="descripcion">{{ category.text }}</p>
+                </div>
+            {% endfor %}
+
+            {% for category in ciudad %}
+                <div class="card ciudad hidden">
+                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                    <p class="name">{{ category.name }}</p>
+                    <p class="descripcion">{{ category.text }}</p>
+                </div>
+            {% endfor %}
+
+            {% for category in distrito %}
+                <div class="card distrito hidden">
+                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                    <p class="name">{{ category.name }}</p>
+                    <p class="descripcion">{{ category.text }}</p>
+                </div>
+            {% endfor %}
+
+            {% for category in departamento %}
+                <div class="card departamento hidden">
+                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                    <p class="name">{{ category.name }}</p>
+                    <p class="descripcion">{{ category.text }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+    
+    <script src="{% static 'js/tabs.js' %}"></script>
+    <script src="{% static 'js/menu-desplegable.js' %}"></script>
+    <script src="{% static 'js/carrusel.js' %}"></script>
+</body>
+</html>

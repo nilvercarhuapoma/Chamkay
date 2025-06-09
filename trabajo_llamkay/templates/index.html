@@ -1,10 +1,11 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LLamkay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLamkay.pe</title>
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,20 +13,35 @@
 </head>
 <body>
     <header>
-        <div class="navbar">
-            <div class="logo">LLamkay</div>
-            <nav>
+        <nav class="navbar">
+            <div class="logo">LLamkay.pe</div>
+            
+            <div class="navbar-center">
                 <a href="#">Nosotros</a>
+                <a href="#">Trabajos</a>
+                <a href="#">Empresas</a>
+            </div>
+            
+            <div class="navbar-right">
                 <div class="auth-buttons">
-                    <button class="btn blue">Registrarse</button>
-                    <button class="btn grey">Iniciar sesión</button>
-                 </div>
-            </nav>
-        </div>
+                    <button class="btn blue" onclick="window.location.href='{% url 'usuarios:register' %}'">Registrarse</button>
+                    <button class="btn grey" onclick="window.location.href='{% url 'usuarios:login' %}'">Iniciar sesión</button>
+                </div>
+            </div>
+        </nav>
     </header>
 
     <section class="hero">
-        <img src="{% static 'images/foto-index.jpg' %}" alt="Banner">
+        <div class="carousel">
+            <img class="carousel-image active" src="{% static 'images/foto-index-1.jpg' %}" alt="Imagen 1">
+            <img class="carousel-image" src="{% static 'images/foto-index-2.jpg' %}" alt="Imagen 2">
+            <img class="carousel-image" src="{% static 'images/foto-index-3.jpg' %}" alt="Imagen 3">
+            <img class="carousel-image" src="{% static 'images/foto-index-4.jpg' %}" alt="Imagen 3">
+
+            <button class="carousel-btn prev" onclick="cambiarImagen(-1)">❮</button>
+            <button class="carousel-btn next" onclick="cambiarImagen(1)">❯</button>
+        </div>
+
         <div class="hero-text">
             <h1>Encuentra el trabajo ideal para ti</h1>
             <p>LLamkay conecta a empleadores con empresas</p>
@@ -36,46 +52,52 @@
         </div>
     </section>
 
+
     <section class="browse">
         <h2>Busca trabajos por</h2>
-      <div class="tabs" id="tab-options">
-        <span class="tab active" data-category="comunidad">Comunidad</span>
-        <span class="tab" data-category="ciudad">Ciudad</span>
-        <span class="tab" data-category="distrito">Distrito</span>
-        <span class="tab" data-category="departamento">Departamento</span>
-    </div>
+        <div class="tabs" id="tab-options">
+            <span class="tab active" data-category="comunidad">Comunidad</span>
+            <span class="tab" data-category="ciudad">Ciudad</span>
+            <span class="tab" data-category="distrito">Distrito</span>
+            <span class="tab" data-category="departamento">Departamento</span>
+        </div>
 
-    <div class="cards-container" id="cards-container">
-        {% for category in comunidad %}
-            <div class="card comunidad">
-                <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
-                <p>{{ category.name }}</p>
-            </div>
-        {% endfor %}
+        <div class="cards-container" id="cards-container">
+            {% for category in comunidad %}
+                <div class="card comunidad">
+                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                    <p class="name">{{ category.name }}</p>
+                    <p class="descripcion">{{ category.text }}</p>
+                </div>
+            {% endfor %}
 
-        {% for category in ciudad %}
-            <div class="card ciudad hidden">
-                <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
-                <p>{{ category.name }}</p>
-            </div>
+            {% for category in ciudad %}
+                <div class="card ciudad hidden">
+                    <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
+                    <p class="name">{{ category.name }}</p>
+                    <p class="descripcion">{{ category.text }}</p>
+                </div>
             {% endfor %}
 
             {% for category in distrito %}
                 <div class="card distrito hidden">
                     <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
-                    <p>{{ category.name }}</p>
+                    <p class="name">{{ category.name }}</p>
+                    <p class="descripcion">{{ category.text }}</p>
                 </div>
             {% endfor %}
 
             {% for category in departamento %}
                 <div class="card departamento hidden">
                     <img src="{% static 'images/' %}{{ category.image }}" alt="{{ category.name }}">
-                    <p>{{ category.name }}</p>
+                    <p class="name">{{ category.name }}</p>
+                    <p class="descripcion">{{ category.text }}</p>
                 </div>
             {% endfor %}
         </div>
-
     </section>
+    
     <script src="{% static 'js/tabs.js' %}"></script>
+    <script src="{% static 'js/carrusel.js' %}"></script>
 </body>
 </html>

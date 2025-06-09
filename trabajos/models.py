@@ -18,3 +18,13 @@ class Oferta(models.Model):
 
     def __str__(self):
         return self.titulo
+    
+    
+class Trabajo(models.Model): #solo es para que me funcione perfil :)
+    # no importes Usuario al inicio
+    
+    # luego en el ForeignKey usa string con el app label + modelo:
+    trabajador = models.ForeignKey('usuarios.Usuario', on_delete=models.CASCADE, related_name='trabajos_realizados')
+    cliente = models.ForeignKey('usuarios.Usuario', on_delete=models.CASCADE, related_name='trabajos_contratados')
+
+    # resto del modelo...

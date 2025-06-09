@@ -4,21 +4,35 @@
 
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #f0f4ff, #e6f0ff);
+    background: #F5ECD5;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    margin: 0;
+    padding: 1rem; /* Para que haya margen en pantallas pequeñas */
+    overflow-x: hidden; /* Previene desbordes */
+}
+
+.contenedor-login-demo {
+    position: relative;
+    height: 90vh;
+    width: 100%;
+    max-width: 900px; /* o el tamaño que quieras para todo el bloque */
+    margin: 0 auto; /* centra horizontalmente */
+    display: flex;
 }
 
 .registro-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
     background: #fff;
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    box-sizing: border-box;
 }
 
 .logo {
@@ -32,6 +46,8 @@ body {
 
 .logo h2 {
     margin: 0.3rem 0;
+    font-family: "Lilita One", sans-serif;
+    font-weight: normal;
 }
 
 h3 {
@@ -60,8 +76,19 @@ h3 {
 }
 
 .progress.active {
-    background-color: #0056ff;
+    background-color: #626F47
 }
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #f5c2c7;
+    font-weight: bold;
+}
+
 
 form fieldset {
     border: none;
@@ -74,6 +101,11 @@ legend {
     margin-bottom: 0.5rem;
 }
 
+.form-box {
+    height: auto;
+    width: 100%;
+}
+
 .form-subtitle {
     color: #666;
     font-size: 0.95rem;
@@ -83,14 +115,14 @@ legend {
 .form-row {
     display: flex;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .form-group {
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .form-group label {
@@ -102,6 +134,58 @@ legend {
     padding: 0.6rem;
     border: 1px solid #ccc;
     border-radius: 6px;
+    width: 100%;
+}
+
+.form-group.password {
+    position: relative;
+}
+
+/* Contenedor personalizado del checkbox */
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  color: #333;
+  user-select: none;
+}
+
+/* Oculta el checkbox nativo y lo personaliza */
+.checkbox input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #9098a9;
+  border-radius: 3px;
+  background-color: #fff;
+  margin-right: 8px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Estilo cuando está marcado */
+.checkbox input[type="checkbox"]:checked {
+  background-color: #626F47;
+  border-color: #626F47;
+}
+
+/* Check visual */
+.checkbox input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
 .form-group.password {
@@ -110,9 +194,23 @@ legend {
 
 .toggle-password {
     position: absolute;
-    right: 10px;
-    top: 35px;
+    right: 12px;
+    top: 70%;
+    transform: translateY(-50%);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password img {
+    width: 20px;
+    height: 20px;
+}
+
+
+.checkbox input[type="checkbox"]:checked::after {
+  opacity: 1;
 }
 
 .checkbox label {
@@ -120,14 +218,14 @@ legend {
 }
 
 .checkbox a {
-    color: #0056ff;
+    color: #626F47;
     text-decoration: none;
 }
 
 .btn-primary {
     width: 100%;
     padding: 0.75rem;
-    background: #0056ff;
+    background: #626F47;
     color: white;
     border: none;
     border-radius: 6px;
@@ -143,6 +241,7 @@ legend {
 }
 
 .login-link a {
-    color: #0056ff;
+    color: #626F47;
     text-decoration: none;
 }
+
