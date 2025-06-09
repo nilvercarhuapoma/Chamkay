@@ -9,5 +9,5 @@ urlpatterns = [
     path('ubicacion/', views.register_two, name='register_two'),
     path('ajax/cargar-provincias/', views.cargar_provincias, name='ajax_cargar_provincias'),
     path('ajax/cargar-distritos/', views.cargar_distritos, name='ajax_cargar_distritos'),
-    path('habilidades/', views.register_three, name='register_three')
+
 ]

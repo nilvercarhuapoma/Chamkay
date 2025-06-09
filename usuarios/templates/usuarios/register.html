@@ -17,15 +17,15 @@
                 <h2>Llamkay</h2>
             </div>
             <h3>Crear cuenta de trabajador</h3>
-            <p class="subtitle">Paso 1 de 3: Información Personal</p>
+            <p class="subtitle">Paso 1 de 2: Información Personal</p>
 
             <div class="progress-bar">
                 <div class="progress active"></div>
                 <div class="progress"></div>
-                <div class="progress"></div>
+
             </div>
 
-            <form method="post">
+            <form method="POST" action="{% url 'usuarios:register' %}">
                 {% csrf_token %}
                 <fieldset>
                     <legend>Información Personal</legend>
