@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     'trabajos',
     'usuarios',
-    
+    'chats',
 
  
 ]
