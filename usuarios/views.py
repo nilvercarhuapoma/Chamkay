@@ -20,7 +20,7 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from usuarios.models import Usuario, Departamento, Provincia, Distrito, Profile, ActividadReciente, Postulacion, Ofertatrabajo
-from usuarios.models import Calificacion, UsuarioHabilidad
+from usuarios.models import Calificacion, UsuarioHabilidad, Comunidad
 from trabajos.models import Trabajo
 
 import logging
@@ -79,31 +79,78 @@ def login(request):
 @login_required
 def dashboard(request):
     """Vista del dashboard para usuarios autenticados - Index con perfil"""
-    # Aquí puedes agregar todos los datos que necesites para el dashboard
-    context = {
-        'user': request.user,  # Añadir el usuario al contexto
+    
+    try:
+        usuario_db = Usuario.objects.get(user=request.user)
+        profile = Profile.objects.filter(user=request.user).first()
+        
+        if not profile:
+            profile = Profile.objects.create(user=request.user, id_usuario=usuario_db)
+
+        context = {
+            'user': request.user,
+            'usuario': usuario_db,
+            'profile': profile,
+            'comunidad': Comunidad.objects.all(),
+            'ciudad': Distrito.objects.all(),
+            'distrito': Distrito.objects.all(),
+            'departamento': Departamento.objects.all(),
+
+
         'comunidad': [
-            {'name': 'Busco carpintero', 'image': 'engineering.jpg'},
-            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
-            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg'},
-            {'name': 'Busco carpintero', 'image': 'engineering.jpg'},
-            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
-            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg','text': 'Ubicación: Tingo Maria'},
+            {'name': 'Busco carpintero', 'image': 'engineering.jpg', 'description': 'Experiencia mínima 3 años', 'location': 'Lima'},
+            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg', 'description': 'Conocimiento en Excel avanzado'},
+            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg', 'text': 'Ubicación: Tingo Maria', 'urgent': True},
+            {'name': 'Busco electricista', 'image': 'electrician.jpg', 'description': 'Certificación vigente'},
+            {'name': 'Busco pintor profesional', 'image': 'painter.jpg', 'description': 'Para trabajos residenciales'},
+            {'name': 'Busco jardinero', 'image': 'gardener.jpg', 'description': 'Experiencia en mantenimiento de áreas verdes'},
         ],
         'ciudad': [
-            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
+            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg', 'city': 'Arequipa', 'posted_date': '2025-06-01'},
+            {'name': 'Busco cocinero', 'image': 'chef.jpg', 'city': 'Cusco', 'posted_date': '2025-06-05'},
         ],
         'distrito': [
-            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg'},
+            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg', 'district': 'Miraflores', 'shift': 'mañana'},
+            {'name': 'Busco personal de limpieza', 'image': 'cleaning.jpg', 'district': 'San Isidro', 'salary': 'S/ 1500 mensual'},
         ],
         'departamento': [
-            {'name': 'Busco personas para sembrar', 'image': 'campo.jpg'},
-            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
-            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg'},
+            {'name': 'Busco personas para sembrar', 'image': 'campo.jpg', 'department': 'Junín', 'experience': '2 años'},
+            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg', 'department': 'Lima'},
+            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg', 'department': 'Loreto', 'availability': 'Inmediata'},
+        ],
+        'notifications': [
+            {'title': 'Nuevo mensaje de Juan', 'time': 'Hace 2 horas', 'read': False},
+            {'title': 'Oferta de trabajo aceptada', 'time': 'Ayer', 'read': True},
+            {'title': 'Actualización de perfil requerida', 'time': 'Hace 3 días', 'read': False},
+        ],
+        'messages': [
+            {'from': 'Maria', 'snippet': 'Hola, estoy interesada en tu oferta...', 'time': '10 minutos atrás'},
+            {'from': 'Pedro', 'snippet': '¿Podrías enviarme más detalles?', 'time': '2 horas atrás'},
+        ],
+        'stats': {
+            'offers_posted': 12,
+            'offers_active': 8,
+            'messages_unread': 3,
+            'notifications_unread': 2,
+        },
+        'tips': [
+            'Actualiza tu perfil para atraer más candidatos.',
+            'Responde rápido a los mensajes para mejorar tu reputación.',
+            'Publica ofertas claras y detalladas para obtener mejores postulantes.',
         ],
     }
-    return render(request, 'usuarios/dashboard.html', context)
 
+        return render(request, 'usuarios/dashboard.html', context)
+
+    
+    except Usuario.DoesNotExist:
+        messages.error(request, "No se encontró tu perfil extendido.")
+        return redirect('usuarios:login')
+
+    except Exception as e:
+        print(f"Error inesperado en vista dashboard: {str(e)}")
+        messages.error(request, "Error al cargar el dashboard.")
+        return redirect('usuarios:login')
 
 def logout_view(request):
     """Vista para cerrar sesión"""

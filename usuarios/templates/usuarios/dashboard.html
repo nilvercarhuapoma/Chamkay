@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LLamkay.pe - Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="icon" href="{% static 'images/llamkay.png' %}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lobster&family=Playwrite+HU:wght@100..400&display=swap" rel="stylesheet">
@@ -25,7 +26,7 @@
             </div>
             
             <div class="navbar-right">
-                <!-- Botón de notificaciones -->
+                <!-- Notificaciones -->
                 <div style="position: relative;">
                     <button class="icon-button" id="notificationsBtn">
                         <svg viewBox="0 0 24 24">
@@ -33,7 +34,6 @@
                         </svg>
                         <span class="notification-badge">3</span>
                     </button>
-                    
                     <div class="dropdown notifications-dropdown" id="notificationsDropdown">
                         <div class="dropdown-header">Notificaciones</div>
                         <div class="notification-item unread">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <!-- Botón de mensajes -->
+                <!-- Mensajes -->
                 <div style="position: relative;">
                     <button class="icon-button" id="messagesBtn">
                         <svg viewBox="0 0 24 24">
@@ -68,7 +68,6 @@
                         </svg>
                         <span class="notification-badge">1</span>
                     </button>
-                    
                     <div class="dropdown messages-dropdown" id="messagesDropdown">
                         <div class="dropdown-header">Mensajes</div>
                         <div class="message-item">
@@ -98,73 +97,80 @@
                     </div>
                 </div>
 
-                <!-- Sección corregida del menú de usuario en dashboard.html -->
-<div style="position: relative;">
-    <div class="user-menu" id="userMenuBtn">
-        <!-- Verificar que existe la imagen del perfil -->
-        {% if user.profile.foto %}
-            <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="profile-pic">
-        {% else %}
-            <!-- Mostrar iniciales si no hay foto -->
-            <div class="profile-pic-placeholder">
-                {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-            </div>
-        {% endif %}
-        <span class="username">{{ user.first_name|default:user.username }}</span>
-        <div class="dropdown-arrow"></div>
-    </div>
-    
-    <div class="dropdown user-dropdown" id="userDropdown">
-        <div class="user-profile-section">
-            {% if user.profile.foto %}
-                <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="user-profile-pic">
-            {% else %}
-                <div class="user-profile-pic-placeholder">
-                    {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-                </div>
-            {% endif %}
-            <div class="user-profile-info">
-                <h3>{{ user.first_name|default:user.username }} {{ user.last_name }}</h3>
-                <p>Ver todos los perfiles</p>
-            </div>
-        </div>
-        
-                        <!-- ENLACE CORREGIDO AL PERFIL -->
+                <!-- Menú de usuario -->
+                <div style="position: relative;">
+                    <div class="user-menu" id="userMenuBtn">
+                        {% if profile.foto_url %}
+                            <img src="{{ profile.foto_url.url }}" alt="Foto de perfil" class="profile-pic">
+                        {% else %}
+                            {% with usuario.nombres|default:"" as fn %}
+                            {% with usuario.apellidos|default:"" as ln %}
+                            <div class="profile-pic-placeholder">
+                                {{ fn|first|upper }}{{ ln|first|upper }}
+                            </div>
+                            {% endwith %}
+                            {% endwith %}
+                        {% endif %}
+                        <span class="username">
+                            {% if usuario.nombres or usuario.apellidos %}
+                                {{ usuario.nombres }} {{ usuario.apellidos }}
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}
+                            </span>
+
+                        <div class="dropdown-arrow"></div>
+                    </div>
+
+                    <div class="dropdown user-dropdown" id="userDropdown">
+                        <div class="user-profile-section">
+                            {% if profile.foto_url %}
+                                <img src="{{ profile.foto_url.url }}" alt="Foto de perfil" class="user-profile-pic">
+                            {% else %}
+                                {% with user.first_name|default:"" as fn %}
+                                {% with user.last_name|default:"" as ln %}
+                                <div class="user-profile-pic-placeholder">
+                                    {{ fn|first|upper }}{{ ln|first|upper }}
+                                </div>
+                                {% endwith %}
+                                {% endwith %}
+                            {% endif %}
+                            <div class="user-profile-info">
+                                <h3>{{ user.first_name|default:user.username }} {{ user.last_name }}</h3>
+                                <p>Ver todos los perfiles</p>
+                            </div>
+                        </div>
+
                         <a href="{% url 'usuarios:perfil' %}" class="dropdown-menu-item">
                             <div class="dropdown-icon">
                                 <img src="{% static 'images/perfil.png' %}" alt="Usuario" class="icon">
                             </div>
                             Perfil
                         </a>
-                        
                         <a href="{% url 'usuarios:configuracion' %}" class="dropdown-menu-item">
                             <div class="dropdown-icon">
                                 <img src="{% static 'images/configuracion.png' %}" alt="Configuración" class="icon">
                             </div>
                             Configuración y privacidad
                         </a>
-                        
                         <a href="{% url 'usuarios:ayuda' %}" class="dropdown-menu-item">
                             <div class="dropdown-icon">
                                 <img src="{% static 'images/ayuda-soporte.png' %}" alt="Ayuda" class="icon">
                             </div>
                             Ayuda y soporte técnico
                         </a>
-                        
                         <a href="{% url 'usuarios:accesibilidad' %}" class="dropdown-menu-item">
                             <div class="dropdown-icon">
                                 <img src="{% static 'images/accesibilidad.png' %}" alt="Accesibilidad" class="icon">
                             </div>
                             Pantalla y accesibilidad
                         </a>
-                        
                         <a href="{% url 'usuarios:comentarios' %}" class="dropdown-menu-item">
                             <div class="dropdown-icon">
                                 <img src="{% static 'images/comentarios.png' %}" alt="Comentarios" class="icon">
                             </div>
                             Enviar comentarios
                         </a>
-                        
                         <a href="{% url 'usuarios:logout' %}" class="dropdown-menu-item logout">
                             <div class="dropdown-icon">
                                 <img src="{% static 'images/cerrar-sesion.png' %}" alt="Cerrar sesión" class="icon">
@@ -241,7 +247,7 @@
             {% endfor %}
         </div>
     </section>
-    
+
     <script src="{% static 'js/tabs.js' %}"></script>
     <script src="{% static 'js/menu-desplegable.js' %}"></script>
     <script src="{% static 'js/carrusel.js' %}"></script>
