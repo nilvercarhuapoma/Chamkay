@@ -127,8 +127,8 @@
                             {% if profile.foto_url %}
                                 <img src="{{ profile.foto_url.url }}" alt="Foto de perfil" class="user-profile-pic">
                             {% else %}
-                                {% with user.first_name|default:"" as fn %}
-                                {% with user.last_name|default:"" as ln %}
+                                {% with usuario.nombres|default:"" as fn %}
+                                {% with usuario.apellidos|default:"" as ln %}
                                 <div class="user-profile-pic-placeholder">
                                     {{ fn|first|upper }}{{ ln|first|upper }}
                                 </div>
@@ -136,7 +136,7 @@
                                 {% endwith %}
                             {% endif %}
                             <div class="user-profile-info">
-                                <h3>{{ user.first_name|default:user.username }} {{ user.last_name }}</h3>
+                                <h3>{{ usuario.nombres|default:user.username }} {{ uusuario.apellidos }}</h3>
                                 <p>Ver todos los perfiles</p>
                             </div>
                         </div>
