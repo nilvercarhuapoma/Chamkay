@@ -21,6 +21,22 @@ def login(request):
     
     return render(request,'usuarios/login.html')
 
+def login_phone(request):
+    if request.method == 'POST':
+        telefono = request.POST.get('telefono')
+        clave = request.POST.get('clave')
+
+        telefono = authenticate(request, telefono=telefono, clave=clave)
+
+        if telefono is not None:
+            return render(request, 'trabajo_llamkay/base/base.html', {'user': telefono})
+        
+        else:
+            error_message = "Invalid email or password."
+            return render(request, 'usuarios/login.html', {'error_message': error_message})
+        
+    return render(request,'usuarios/login.html')
+
 def register(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
@@ -33,11 +49,19 @@ def register(request):
             error_message = "Este correo ya está registrado."
             return render(request, 'usuarios/register.html', {'error_message': error_message})
 
+        if not telefono.isdigit():
+            error_message = "El número debe contener solo dígitos."
+            return render(request, 'usuarios/register.html', {'error_message': error_message})
+
+        if len(telefono) != 9 or telefono[0] != '9':
+            error_message = "El número de teléfono debe tener 9 dígitos y empezar con 9."
+            return render(request, 'usuarios/register.html', {'error_message': error_message})
+
         if clave != clave_confirm:
             error_message = "Las contraseñas no coinciden."
             return render(request, 'usuarios/register.html', {'error_message': error_message})
 
-        # Guardamos temporalmente los datos en sesión
+        # Guardar datos temporalmente en la sesión
         request.session['temp_register'] = {
             'nombre': nombre,
             'email': email,
@@ -48,6 +72,7 @@ def register(request):
         return redirect('usuarios:register_two')
 
     return render(request, 'usuarios/register.html')
+
 
 
 
@@ -62,9 +87,7 @@ def register_two(request):
         temp_data = request.session.get('temp_register')
 
         if not temp_data:
-            return redirect('usuarios:register')  # Si se pierde la sesión, vuelve al inicio
-
-        # Verificamos que la ubicación sea válida
+            return redirect('usuarios:register')
         try:
             departamento = Departamento.objects.get(id_departamento=departamento_id)
             provincia = Provincia.objects.get(id_provincia=provincia_id)
