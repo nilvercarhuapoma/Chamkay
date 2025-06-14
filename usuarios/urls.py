@@ -9,6 +9,8 @@ urlpatterns = [
     path('ubicacion/', views.register_two, name='register_two'),
     path('dashboard/', views.dashboard, name='dashboard'),  
     path('register/', views.register, name='register'),
+    path('register/<str:tipo_usuario>/', views.register, name='register_tipo'),
+    path('registro_tipo/', views.seleccionar_tipo, name='seleccionar_tipo'),
     path('perfil/', views.perfil, name='perfil'),
     path('actualizar_perfil/', views.actualizar_perfil, name='actualizar_perfil'),
     path('configuracion/', views.configuracion, name='configuracion'),
@@ -18,6 +20,7 @@ urlpatterns = [
     path('cargar_provincias/', views.cargar_provincias, name='cargar_provincias'),
     path('cargar_distritos/', views.cargar_distritos, name='cargar_distritos'),
     path('validar_correo/', views.validar_correo, name='validar_correo'),
-    path('habilidades/', views.register_three, name='register_three')
-    
+    path('habilidades/', views.register_three, name='register_three'),
+    path('buscar-dni/', views.buscar_dni, name='buscar_dni'),
+    path('buscar-ruc/', views.buscar_ruc, name='buscar_ruc')
 ]

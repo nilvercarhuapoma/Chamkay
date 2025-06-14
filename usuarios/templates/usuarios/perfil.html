@@ -48,10 +48,15 @@
             <textarea name="descripcion" id="descripcion">{{ profile.bio }}</textarea>
 
             <label for="disponibilidad">Disponibilidad:</label>
-            <input type="text" name="disponibilidad" id="disponibilidad" value="{{ profile.disponibilidad }}">
+            <input type="text" name="disponibilidad" id="disponibilidad" value="{{ disponibilidad|default_if_none:'' }}">
 
             <label for="precio_hora">Precio por hora (S/):</label>
-            <input type="number" name="precio_hora" id="precio_hora" step="0.01" value="{{ profile.precio_hora }}">
+            <input type="number" name="precio_hora" id="precio_hora" step="0.01" value="{{ precio_hora|default_if_none:'' }}">
+
+            <!-- CAMPOS OCULTOS para mantener ubicación -->
+            <input type="hidden" name="id_departamento" value="{{ profile.id_departamento.id }}">
+            <input type="hidden" name="id_provincia" value="{{ profile.id_provincia.id }}">
+            <input type="hidden" name="id_distrito" value="{{ profile.id_distrito.id }}">
 
             <div class="modal-buttons">
                 <button type="submit">Guardar cambios</button>
@@ -59,6 +64,7 @@
             </div>
         </form>
     </div>
+            
 
     <!-- CONTENIDO PRINCIPAL -->
     <div class="container">
@@ -77,11 +83,12 @@
                 <div class="profile-info">
                     <h1>{{ usuario.nombres }} {{ usuario.apellidos }}</h1>
                     <p>📧 {{ usuario.email }}</p>
+                    <p>👤 {{ usuario.username }}</p>
                     <p>📍 
-                        {% if usuario.id_distrito %}{{ usuario.id_distrito.nombre }}{% else %}Distrito no especificado{% endif %},
-                        {% if usuario.id_provincia %}{{ usuario.id_provincia.nombre }}{% else %}Provincia no especificada{% endif %}
+                        {% if profile.id_distrito %}{{ profile.id_distrito.nombre }}{% else %}Distrito no especificado{% endif %},
+                        {% if profile.id_provincia %}{{ profile.id_provincia.nombre }}{% else %}Provincia no especificada{% endif %}
                     </p>
-                    <p>🗕️ Miembro desde {{ usuario.fecha_creacion|date:"F Y" }}</p>
+                    <p>🔍 Miembro desde {{ profile.fecha_registro|date:"F Y" }}
 
                     <div class="profile-badges">
                         <div class="profile-badge badge-verified">✅ Perfil Verificado</div>
@@ -121,13 +128,9 @@
                     </div>
                     <div class="info-item"><span class="info-label">Nombre completo:</span><span class="info-value">{{ usuario.nombres }} {{ usuario.apellidos }}</span></div>
                     <div class="info-item"><span class="info-label">Teléfono:</span><span class="info-value">{{ usuario.telefono|default:"No especificado" }}</span></div>
-                    <div class="info-item"><span class="info-label">Distrito:</span><span class="info-value">{% if usuario.id_distrito %}{{ usuario.id_distrito.nombre }}{% else %}No especificado{% endif %}</span></div>
-                    <div class="info-item"><span class="info-label">Disponibilidad:</span><span class="info-value">{{ profile.disponibilidad|default:"No especificada" }}</span></div>
-                    <div class="info-item"><span class="info-label">Precio por hora (S/):</span>
-                        <span class="info-value">
-                            {% if profile.precio_hora %}S/ {{ profile.precio_hora|floatformat:2 }}{% else %}No especificado{% endif %}
-                        </span>
-                    </div>
+                    <div class="info-item"><span class="info-label">Distrito:</span><span class="info-value">{% if profile.id_distrito %}{{ profile.id_distrito.nombre }}{% else %}No especificado{% endif %}</span></div>
+                    <div class="info-item"><span class="info-label">Disponibilidad:</span><span class="info-value">{{ disponibilidad|default:"No especificada" }}</span></div>
+                    <div class="info-item"><span class="info-label">Precio por hora (S/):</span><span class="info-value">{% if precio_hora %}S/ {{ precio_hora|floatformat:2 }}{% else %}No especificado{% endif %}</span></div>
                 </div>
 
                 <!-- Rendimiento -->

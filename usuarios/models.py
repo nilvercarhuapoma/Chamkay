@@ -4,6 +4,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class ActividadReciente(models.Model):
     usuario = models.ForeignKey('Usuario', models.DO_NOTHING)
     titulo = models.CharField(max_length=255)
@@ -223,6 +224,41 @@ class Usuario(models.Model):
 
     class Meta:
         db_table = 'usuario'
+
+
+class Certificacion(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='certificaciones/')
+    descripcion = models.CharField(max_length=255)
+    fecha_subida = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'certificacion'
+
+
+class AntecedentePenal(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='penales/')
+    aprobado = models.BooleanField(default=False)
+    observaciones = models.TextField(blank=True)
+
+    class Meta:
+        db_table = 'antecedente_penal'
+
+
+class Empresa(models.Model):
+    id_empresa = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255)
+    ruc = models.CharField(max_length=11, unique=True)
+    razon_social = models.CharField(max_length=255)
+    direccion = models.TextField(blank=True, null=True)
+    telefono = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    representante = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    fecha_registro = models.DateField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'empresa'
 
 
 class UsuarioCategoria(models.Model):

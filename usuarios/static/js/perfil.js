@@ -414,6 +414,49 @@ function initializeTooltips() {
     });
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('form-editar-perfil');
+    
+    if (!form) {
+        console.warn('❌ Formulario de edición no encontrado');
+        return;
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch('/usuarios/actualizar-perfil/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al guardar los cambios');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'ok') {
+                alert('✅ Perfil actualizado correctamente');
+                location.reload();
+            } else {
+                alert('⚠️ Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('❌ Error de red o servidor:', error);
+            alert('❌ Error en la conexión. Intenta de nuevo.');
+        });
+    });
+});
+
+
 // Funciones globales para mantener compatibilidad
 window.showTab = showTab;
 window.editProfile = editProfile;

@@ -1,3 +1,4 @@
+/* Reset y configuración base */
 * {
     box-sizing: border-box;
 }
@@ -11,16 +12,17 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 1rem; /* Para que haya margen en pantallas pequeñas */
-    overflow-x: hidden; /* Previene desbordes */
+    padding: 1rem;
+    overflow-x: hidden;
 }
 
+/* Contenedores principales */
 .contenedor-login-demo {
     position: relative;
     height: 90vh;
     width: 100%;
-    max-width: 900px; /* o el tamaño que quieras para todo el bloque */
-    margin: 0 auto; /* centra horizontalmente */
+    max-width: 900px;
+    margin: 0 auto;
     display: flex;
 }
 
@@ -35,6 +37,7 @@ body {
     box-sizing: border-box;
 }
 
+/* Logo y títulos */
 .logo {
     text-align: center;
     margin-bottom: 1rem;
@@ -51,8 +54,10 @@ body {
 }
 
 h3 {
+    color: #2d3748;
     text-align: center;
-    margin: 0;
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
 }
 
 .subtitle {
@@ -62,6 +67,7 @@ h3 {
     font-size: 0.95rem;
 }
 
+/* Barra de progreso */
 .progress-bar {
     display: flex;
     gap: 5px;
@@ -76,20 +82,21 @@ h3 {
 }
 
 .progress.active {
-    background-color: #626F47
+    background-color: #626F47;
 }
 
+/* Alertas */
 .alert-error {
-    background-color: #f8d7da;
-    color: #842029;
-    padding: 10px 15px;
+    background: rgba(229, 62, 62, 0.1);
+    border: 1px solid #e53e3e;
+    color: #e53e3e;
+    padding: 12px;
     border-radius: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #f5c2c7;
+    margin-bottom: 20px;
     font-weight: bold;
 }
 
-
+/* Formulario */
 form fieldset {
     border: none;
     padding: 0;
@@ -112,6 +119,7 @@ legend {
     margin-bottom: 1rem;
 }
 
+/* Filas y grupos de formulario */
 .form-row {
     display: flex;
     gap: 1rem;
@@ -126,68 +134,81 @@ legend {
 }
 
 .form-group label {
-    font-weight: bold;
-    margin-bottom: 0.4rem;
+    display: block;
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
-.form-group input {
-    padding: 0.6rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+/* Inputs */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"] {
     width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
 }
 
-.form-group.password {
-    position: relative;
+.form-group input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    transform: translateY(-2px);
 }
 
-/* Contenedor personalizado del checkbox */
-.checkbox {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  font-family: sans-serif;
-  font-size: 0.9rem;
-  color: #333;
-  user-select: none;
+/* Inputs de solo lectura */
+.form-group input[readonly] {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+    color: #4a5568;
+    cursor: not-allowed;
 }
 
-/* Oculta el checkbox nativo y lo personaliza */
-.checkbox input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 1.5px solid #9098a9;
-  border-radius: 3px;
-  background-color: #fff;
-  margin-right: 8px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.form-group input[readonly]:focus {
+    border-color: #cbd5e0;
+    box-shadow: none;
+    transform: none;
 }
 
-/* Estilo cuando está marcado */
-.checkbox input[type="checkbox"]:checked {
-  background-color: #626F47;
-  border-color: #626F47;
+.form-group input[readonly]:hover {
+    background: #edf2f7;
 }
 
-/* Check visual */
-.checkbox input[type="checkbox"]::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 4px;
-  height: 9px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-  opacity: 0;
-  transition: opacity 0.2s;
+/* Contenedor de búsqueda */
+.search-container {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
 }
 
+.search-container input {
+    flex: 1;
+}
+
+.search-container button {
+    padding: 12px 20px;
+    background: #626F47;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.search-container button:hover {
+    background: #4a5635;
+    transform: translateY(-1px);
+}
+
+/* Campo de contraseña con toggle */
 .form-group.password {
     position: relative;
 }
@@ -208,40 +229,227 @@ legend {
     height: 20px;
 }
 
-
-.checkbox input[type="checkbox"]:checked::after {
-  opacity: 1;
+/* Checkbox personalizado */
+.form-group.checkbox {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 1rem 0;
 }
 
-.checkbox label {
+.form-group.checkbox input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #9098a9;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.form-group.checkbox input[type="checkbox"]:hover {
+    border-color: #626F47;
+    transform: scale(1.05);
+}
+
+.form-group.checkbox input[type="checkbox"]:checked {
+    background-color: #626F47;
+    border-color: #626F47;
+}
+
+.form-group.checkbox input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(98, 111, 71, 0.2);
+}
+
+.form-group.checkbox input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 4px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.form-group.checkbox input[type="checkbox"]:checked::after {
+    opacity: 1;
+}
+
+.form-group.checkbox label {
     font-size: 0.9rem;
+    color: #4a5568;
+    line-height: 1.4;
+    cursor: pointer;
+    margin: 0;
 }
 
-.checkbox a {
+.form-group.checkbox label a {
     color: #626F47;
     text-decoration: none;
+    font-weight: 500;
 }
 
+.form-group.checkbox label a:hover {
+    text-decoration: underline;
+}
+
+/* Botones */
 .btn-primary {
     width: 100%;
-    padding: 0.75rem;
+    padding: 12px 0;
     background: #626F47;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
     font-weight: bold;
+    font-size: 1rem;
     cursor: pointer;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
 }
 
+.btn-primary:hover {
+    background: #4a5635;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(98, 111, 71, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-search {
+    padding: 12px 20px;
+    background: #626F47;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-size: 1rem;
+}
+
+.btn-search:hover {
+    background: #4a5635;
+    transform: translateY(-1px);
+}
+
+/* Enlaces */
 .login-link {
     text-align: center;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     font-size: 0.9rem;
+    color: #666;
 }
 
 .login-link a {
     color: #626F47;
     text-decoration: none;
+    font-weight: 500;
 }
 
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Mensajes de error */
+.error-message {
+    color: #e53e3e;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    padding: 5px;
+    background: rgba(229, 62, 62, 0.1);
+    border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 0.5rem;
+    }
+    
+    .registro-container {
+        padding: 1.5rem;
+        margin: 10px;
+        border-radius: 8px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .logo h2 {
+        font-size: 2rem;
+    }
+
+    .search-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-container button {
+        width: 100%;
+    }
+    
+    .form-group.checkbox {
+        gap: 8px;
+    }
+    
+    .form-group.checkbox label {
+        font-size: 0.85rem;
+    }
+}
+
+    .readonly-field {
+      background-color: #f8f9fa !important;
+      border: 1px solid #e9ecef !important;
+      cursor: not-allowed !important;
+      opacity: 0.7;
+    }
+    
+    .readonly-field:focus {
+      box-shadow: none !important;
+      border-color: #e9ecef !important;
+    }
+    
+    .field-info {
+      font-size: 0.8em;
+      color: #6c757d;
+      margin-top: 2px;
+      font-style: italic;
+    }
+
+@media (max-width: 480px) {
+    .registro-container {
+        padding: 1rem;
+    }
+    
+    h3 {
+        font-size: 1.3rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"],
+    .form-group input[type="tel"] {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+}

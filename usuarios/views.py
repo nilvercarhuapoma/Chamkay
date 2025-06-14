@@ -10,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg, Count, Q, Sum
 from django.views.decorators.http import require_POST
 from django.utils import timezone
+from django.utils.timezone import now
 from django.conf import settings
 from django.http import HttpResponse
 
@@ -26,11 +27,13 @@ from trabajos.models import Trabajo
 import logging
 import traceback
 from django.db import IntegrityError
-from .forms import RegisterFormStep1, RegisterFormStep2, RegisterFormStep3
+from .forms import RegisterFormStep1, RegisterFormStep2, RegisterFormStep3, RegisterEmpresaForm
 from .models import TrabajosRealizados
 from django.contrib.auth import login
 
 from django.contrib.auth import get_user_model
+from django.db import transaction
+import requests
 
 User = get_user_model()
 
@@ -59,13 +62,26 @@ def login(request):
 
             user = authenticate(request, username=user_obj.username, password=password)
             if user is not None:
+                # Validar antecedentes penales ANTES de iniciar sesión
+                try:
+                    usuario = Usuario.objects.get(user=user)
+                    if hasattr(usuario, 'antecedentepenal') and not usuario.antecedentepenal.aprobado:
+                        return render(request, 'usuarios/bloqueado_penal.html', {
+                            'error_message': 'Tu cuenta está bloqueada por antecedentes penales. Contacta al soporte.'
+                        })
+                except Usuario.DoesNotExist:
+                    pass  # O podrías manejarlo como error crítico
+
+                # Si no tiene penalizaciones, continuar con login
                 django_login(request, user)
                 messages.success(request, f'Bienvenido {user.first_name or user.username}!')
                 return redirect('usuarios:dashboard')
+
             else:
                 return render(request, 'usuarios/login.html', {
                     'error_message': "Correo o contraseña incorrecta."
                 })
+
         except Exception as e:
             return render(request, 'usuarios/login.html', {
                 'error_message': f"Ocurrió un error. {str(e)}"
@@ -73,8 +89,8 @@ def login(request):
 
     if request.user.is_authenticated:
         return redirect('usuarios:dashboard')
-    return render(request, 'usuarios/login.html')
 
+    return render(request, 'usuarios/login.html')
 
 @login_required
 def dashboard(request):
@@ -152,6 +168,7 @@ def dashboard(request):
         messages.error(request, "Error al cargar el dashboard.")
         return redirect('usuarios:login')
 
+
 def logout_view(request):
     """Vista para cerrar sesión"""
     logout(request)
@@ -159,50 +176,99 @@ def logout_view(request):
     return redirect('/')  # Redirige a la página principal después del logout
 
 
-
 def validar_correo(request):
     email = request.GET.get('email')
     existe = User.objects.filter(email=email).exists()
     return JsonResponse({'exists': existe})
 
-def register(request):
+
+@csrf_protect
+def seleccionar_tipo(request):
     if request.method == 'POST':
-        form = RegisterFormStep1(request.POST)
+        tipo = request.POST.get('tipo_usuario')
+        if tipo in ['trabajador', 'empleador', 'trabajador_empleador', 'empresa']:
+            request.session['tipo_usuario'] = tipo
+            return redirect('usuarios:register')  # <- paso 1
+        else:
+            return render(request, 'usuarios/seleccionar_tipo.html', {
+                'error': 'Selecciona una opción válida.'
+            })
+    return render(request, 'usuarios/seleccionar_tipo.html')
+
+
+def register(request, tipo_usuario=None):
+    if tipo_usuario:
+        request.session['tipo_usuario'] = tipo_usuario
+    
+    if 'tipo_usuario' not in request.session:
+        return redirect('usuarios:seleccionar_tipo')
+
+    tipo = request.session.get('tipo_usuario', 'trabajador')
+    
+    if request.method == 'POST':
+        if tipo == 'empresa':
+            form = RegisterEmpresaForm(request.POST)
+        else:
+            form = RegisterFormStep1(request.POST)
+
         if form.is_valid():
             cd = form.cleaned_data
 
             if cd['password1'] != cd['password2']:
                 form.add_error('password2', 'Las contraseñas no coinciden.')
-                return render(request, 'usuarios/register.html', {'form': form})
+                context = {'form': form, 'tipo_usuario': tipo}
+                return render(request, 'usuarios/register.html', context)
 
             if User.objects.filter(email=cd['email']).exists():
                 form.add_error(None, 'Este correo ya está en uso. Intenta con otro.')
-                return render(request, 'usuarios/register.html', {'form': form})
+                context = {'form': form, 'tipo_usuario': tipo}
+                return render(request, 'usuarios/register.html', context)
 
             try:
-                user = User.objects.create_user(
-                    username=f"user{User.objects.count() + 1}",
-                    email=cd['email'],
-                    first_name=cd['nombre'],
-                    last_name=cd['apellido'],
-                    password=cd['password1']
-                )
-
-                # Guardar datos en sesión para usarlos luego
-                request.session['user_id'] = user.id
-                request.session['telefono'] = cd['telefono']
-                request.session['dni'] = cd['dni']  # si lo incluiste en el formulario
+                # Manejar diferentes tipos de usuario
+                if tipo == 'empresa':
+                    # Para empresas, usar razon_social como nombre
+                    user = User.objects.create_user(
+                        username=f"empresa{User.objects.count() + 1}",
+                        email=cd['email'],
+                        first_name=cd['razon_social'][:30],  # Limitar longitud
+                        last_name='',  # Las empresas no tienen apellido
+                        password=cd['password1']
+                    )
+                    
+                    # Guardar datos específicos de empresa en sesión
+                    request.session['user_id'] = user.id
+                    request.session['telefono'] = cd['telefono']
+                    request.session['ruc'] = cd['ruc']
+                    request.session['razon_social'] = cd['razon_social']
+                else:
+                    # Para personas naturales
+                    user = User.objects.create_user(
+                        username=f"user{User.objects.count() + 1}",
+                        email=cd['email'],
+                        first_name=cd['nombre'],
+                        last_name=cd['apellido'],
+                        password=cd['password1']
+                    )
+                    
+                    # Guardar datos específicos de persona en sesión
+                    request.session['user_id'] = user.id
+                    request.session['telefono'] = cd['telefono']
+                    request.session['dni'] = cd['dni']
 
                 return redirect('usuarios:register_two')
 
             except IntegrityError:
                 form.add_error(None, 'Hubo un error al crear el usuario. Inténtalo nuevamente.')
-                return render(request, 'usuarios/register.html', {'form': form})
 
-    else:# ✅ Aquí está el retorno que faltaba
-        form = RegisterFormStep1()
-        
-    return render(request, 'usuarios/register.html', {'form': form})
+    else:
+        if tipo == 'empresa':
+            form = RegisterEmpresaForm()
+        else:
+            form = RegisterFormStep1()
+
+    context = {'form': form, 'tipo_usuario': tipo}
+    return render(request, 'usuarios/register.html', context)
 
 
 def register_two(request):
@@ -237,44 +303,82 @@ def register_three(request):
             user = User.objects.get(id=user_id)
 
             # Crear Usuario
-            usuario, _ = Usuario.objects.get_or_create(
+            tipo = request.session.get('tipo_usuario', 'trabajador')
+
+            # Preparar datos según el tipo de usuario
+            if tipo == 'empresa':
+                # Para empresas
+                nombres = request.session.get('razon_social', 'Empresa')
+                apellidos = ''
+                dni = request.session.get('ruc', '00000000000')  # Usar RUC como identificador
+            else:
+                # Para personas naturales
+                nombres = user.first_name or 'Nombre'
+                apellidos = user.last_name or 'Apellido'
+                dni = request.session.get('dni', '00000000')
+
+            usuario, creado = Usuario.objects.get_or_create(
                 user=user,
                 defaults={
-                    'nombres': user.first_name or 'Nombre',
-                    'apellidos': user.last_name or 'Apellido',
+                    'nombres': nombres,
+                    'apellidos': apellidos,
                     'username': f'user{user.id}',
                     'email': user.email,
                     'telefono': request.session.get('telefono', ''),
-                    'clave': '',  # si no lo usas para nada, puedes eliminar el campo del modelo también
-                    'dni': request.session.get('dni', '00000000'),
+                    'clave': '',
+                    'dni': dni,
                     'direccion': request.session.get('direccion', ''),
                     'fecha_nacimiento': None,
                     'sexo': '',
-                    'tipo_usuario': 'trabajador',
+                    'tipo_usuario': tipo,
                     'habilitado': True,
                 }
             )
 
+            # Si el usuario ya existía, actualizamos su tipo
+            if not creado and usuario.tipo_usuario != tipo:
+                usuario.tipo_usuario = tipo
+                usuario.save()
 
             # Crear Profile con todos los datos completos
-
             profile, _ = Profile.objects.get_or_create(user=user, id_usuario=usuario)
+
+            # Resto del código de profile...
             profile.direccion = request.session.get('direccion', '')
-            profile.id_departamento = Departamento.objects.get(id_departamento=request.session.get('departamento_id'))
-            profile.id_provincia = Provincia.objects.get(id_provincia=request.session.get('provincia_id'))
-            profile.id_distrito = Distrito.objects.get(id_distrito=request.session.get('distrito_id'))
-            profile.habilidades = cd['habilidades']
+
+            # Ubicación geográfica
+            departamento_id = request.session.get('departamento_id')
+            provincia_id = request.session.get('provincia_id')
+            distrito_id = request.session.get('distrito_id')
+
+            if departamento_id:
+                profile.id_departamento = Departamento.objects.get(id_departamento=departamento_id)
+            if provincia_id:
+                profile.id_provincia = Provincia.objects.get(id_provincia=provincia_id)
+            if distrito_id:
+                profile.id_distrito = Distrito.objects.get(id_distrito=distrito_id)
+
+            profile.bio = cd.get('bio', '')
+            profile.categorias = cd.get('categorias', '')
+            profile.habilidades = cd.get('habilidades', '')
+
             profile.redes_sociales = {
-                'disponibilidad': cd['disponibilidad'],
-                'experiencia': cd['experiencia'],
-                'tarifa': str(cd['tarifa']) if cd['tarifa'] else '',
+                'disponibilidad': cd.get('disponibilidad', ''),
+                'experiencia': cd.get('experiencia', ''),
+                'precio_hora': str(cd.get('tarifa', '')) if cd.get('tarifa') else '',
             }
+
+            if not profile.fecha_registro:
+                profile.fecha_registro = now()
+
             profile.save()
 
             # Limpiar sesión
-            for key in ['user_id', 'dni', 'telefono', 'direccion', 'departamento_id', 'provincia_id', 'distrito_id']:
+            keys_to_clear = ['user_id', 'dni', 'ruc', 'telefono', 'direccion', 
+                           'departamento_id', 'provincia_id', 'distrito_id', 
+                           'razon_social', 'tipo_usuario']
+            for key in keys_to_clear:
                 request.session.pop(key, None)
-
 
             return redirect('usuarios:login')
     else:
@@ -282,6 +386,55 @@ def register_three(request):
 
     return render(request, 'usuarios/register_three.html', {'form': form})
 
+
+def buscar_dni(request):
+    dni = request.GET.get('dni')
+    if not dni:
+        return JsonResponse({'error': 'DNI requerido'}, status=400)
+
+    try:
+        token = 'apis-token-15786.a5pDn7ZEv4aCW9xZn8NgL8kjKXXOYU3F'
+        url = f"https://api.apis.net.pe/v1/dni?numero={dni}"
+        headers = {'Authorization': f'Bearer {token}'}
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 200:
+            data = response.json()
+            return JsonResponse({
+                'nombres': data.get('nombres', ''),
+                'apellido_paterno': data.get('apellidoPaterno', ''),
+                'apellido_materno': data.get('apellidoMaterno', '')
+            })
+        else:
+            return JsonResponse({'error': 'No se encontró el DNI'}, status=response.status_code)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+    
+def buscar_ruc(request):
+    ruc = request.GET.get('ruc')
+    if not ruc or len(ruc) != 11:
+        return JsonResponse({'error': 'RUC inválido'}, status=400)
+
+    try:
+        # Aquí va tu token personal de la API
+        token = 'apis-token-15786.a5pDn7ZEv4aCW9xZn8NgL8kjKXXOYU3F'
+        url = f'https://api.apis.net.pe/v1/ruc?numero={ruc}'
+        headers = {'Authorization': f'Bearer {token}'}
+
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            return JsonResponse({
+                'razon_social': data.get('nombre')  # ← Ajusta el campo según la respuesta de la API
+            })
+        else:
+            return JsonResponse({'error': 'No se pudo obtener datos del RUC'}, status=404)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
 
 def cargar_provincias(request):
     id_departamento = request.GET.get('id_departamento')
@@ -373,37 +526,69 @@ def perfil(request):
    
 @login_required
 @require_POST
+@transaction.atomic
 def actualizar_perfil(request):
-    usuario_db = Usuario.objects.get(user=request.user)
-    profile, _ = Profile.objects.get_or_create(user=request.user, defaults={'id_usuario': usuario_db})
+    try:
+        usuario_db = Usuario.objects.get(user=request.user)
+        profile, _ = Profile.objects.get_or_create(user=request.user, id_usuario=usuario_db)
 
-    usuario_db.nombres = request.POST.get('nombres', '')
-    usuario_db.apellidos = request.POST.get('apellidos', '')
-    usuario_db.telefono = request.POST.get('telefono', '')
-    usuario_db.save()
+        # Actualizar campos simples del usuario solo si se envían
+        if 'nombres' in request.POST:
+            usuario_db.nombres = request.POST['nombres']
 
-    profile.bio = request.POST.get('descripcion', '')
-    profile.id_departamento = Departamento.objects.get(id_departamento=request.POST.get('departamento')) if request.POST.get('departamento') else None
-    profile.id_provincia = Provincia.objects.get(id_provincia=request.POST.get('provincia')) if request.POST.get('provincia') else None
-    profile.id_distrito = Distrito.objects.get(id_distrito=request.POST.get('distrito')) if request.POST.get('distrito') else None
+        if 'apellidos' in request.POST:
+            usuario_db.apellidos = request.POST['apellidos']
 
-    redes = profile.redes_sociales or {}
-    redes['disponibilidad'] = request.POST.get('disponibilidad', '')
-    redes['precio_hora'] = request.POST.get('precio_hora', '')
-    profile.redes_sociales = redes
+        if 'telefono' in request.POST:
+            usuario_db.telefono = request.POST['telefono']
 
-    if 'foto' in request.FILES:
-        profile.foto_url = request.FILES['foto']
-    profile.save()
+        usuario_db.save()
 
-    # Guardar habilidades
-    ah_ids = request.POST.getlist('habilidades')
-    profile.categorias = ','.join(ah_ids)
-    profile.save()
-    # Opcional: borrar/crear UsuarioHabilidad según ah_ids
+        # Bio
+        if 'descripcion' in request.POST:
+            profile.bio = request.POST['descripcion']
 
-    ActividadReciente.objects.create(usuario=usuario_db, descripcion='Perfil modificado', fecha=timezone.now())
-    return JsonResponse({'success': True})
+        # Foto
+        if 'foto' in request.FILES:
+            profile.foto_url = request.FILES['foto']
+
+        # Ubicación (proteger campos de ser borrados si no llegan)
+        try:
+            if request.POST.get('id_departamento'):
+                profile.id_departamento = Departamento.objects.get(id_departamento=request.POST['id_departamento'])
+        except Departamento.DoesNotExist:
+            pass
+
+        try:
+            if request.POST.get('id_provincia'):
+                profile.id_provincia = Provincia.objects.get(id_provincia=request.POST['id_provincia'])
+        except Provincia.DoesNotExist:
+            pass
+
+        try:
+            if request.POST.get('id_distrito'):
+                profile.id_distrito = Distrito.objects.get(id_distrito=request.POST['id_distrito'])
+        except Distrito.DoesNotExist:
+            pass
+
+        # Redes sociales (JSONField): mantener valores anteriores si no se envían
+        redes = profile.redes_sociales or {}
+
+        if 'disponibilidad' in request.POST:
+            redes['disponibilidad'] = request.POST['disponibilidad']
+
+        if 'precio_hora' in request.POST:
+            redes['precio_hora'] = request.POST['precio_hora']
+
+        profile.redes_sociales = redes
+
+        profile.save()
+
+        return JsonResponse({'status': 'ok', 'message': 'Perfil actualizado correctamente.'})
+
+    except Exception as e:
+        print("Error al actualizar perfil:", str(e))
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 @login_required
 def actualizar_servicios(request):
