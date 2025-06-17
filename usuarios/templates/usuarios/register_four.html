@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro - Llamkay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lobster&family=Playwrite+HU:wght@100..400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/register_four.css' %}" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">
+      <h2>Llamkay</h2>
+    </div>
+    
+    <h1>Verificación de antecedentes</h1>
+    <p class="subtitle">Paso 4 de 4: Documentación</p>
+
+    <!-- Barra de progreso -->
+    <div class="progress-bar">
+      <div class="progress active"></div>
+      <div class="progress active"></div>
+      <div class="progress active"></div>
+      <div class="progress active"></div>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert-error">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" id="registerFourForm" novalidate>
+      {% csrf_token %}
+      
+      <fieldset>
+        <legend>Constancia de Antecedentes Penales</legend>
+        <p class="form-subtitle">
+          Sube tu constancia de antecedentes penales. Este documento es obligatorio para completar el registro y garantizar la seguridad de nuestra plataforma.
+        </p>
+
+        <div class="form-group">
+          <label for="{{ form.constancia_antecedentes.id_for_label }}">
+            Constancia de Antecedentes Penales *
+          </label>
+          <input type="file" 
+                 name="constancia_antecedentes" 
+                 id="{{ form.constancia_antecedentes.id_for_label }}"
+                 accept=".pdf,.jpg,.jpeg,.png"
+                 required>
+          <div class="file-info">
+            Formatos permitidos: PDF, JPG, PNG. Tamaño máximo: 5MB
+          </div>
+          
+          <div class="file-requirements">
+            <strong>Requisitos del documento:</strong>
+            <ul>
+              <li>Debe ser una constancia oficial emitida por entidad competente</li>
+              <li>El documento debe estar vigente (no mayor a 3 meses)</li>
+              <li>Debe ser claramente legible</li>
+              <li>Formatos aceptados: PDF, JPG, JPEG, PNG</li>
+              <li>Tamaño máximo del archivo: 5MB</li>
+            </ul>
+          </div>
+          
+          {% if form.constancia_antecedentes.errors %}
+            <div class="error-message">{{ form.constancia_antecedentes.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        {% if error %}
+          <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <div class="button-group">
+          <a href="{% url 'usuarios:register_three' %}" class="btn-outline">← Anterior</a>
+          <button type="submit" class="btn-primary">Finalizar Registro</button>
+        </div>
+      </fieldset>
+    </form>
+
+    <p class="login-link">
+      ¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a>
+    </p>
+  </div>
+
+  <script src="{% static 'js/subirArchivos.js' %}"></script>
+
+</body>
+
+</html>

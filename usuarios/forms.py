@@ -1,7 +1,8 @@
 # usuarios/forms.py
 from django import forms
 from usuarios.models import Usuario, Profile 
-from usuarios.models import Departamento, Provincia, Distrito
+from usuarios.models import Departamento, Provincia, Distrito, Certificacion
+from usuarios.widgets import MultiFileInput  
 
 
 class RegisterEmpresaForm(forms.Form):
@@ -171,12 +172,26 @@ class RegisterFormStep3(forms.Form):
         help_text="Puedes subir un archivo PDF o imagen de tus certificados"
     )
 
-class RegisterFormStep4(forms.Form):
-    constancia_penal = forms.FileField(
+class MultipleCertificacionesForm(forms.Form):
+    archivos = forms.FileField(
+        widget=MultiFileInput(attrs={'multiple': True}),
         required=True,
-        label="Certificado de antecedentes penales (PDF)",
-        help_text="Debe estar limpio para poder activar la cuenta"
+        help_text="Puedes subir varios archivos (PDF, imágenes, etc.)"
     )
+    descripcion = forms.CharField(
+        max_length=255,
+        required=False,
+        help_text="Descripción opcional para todas las certificaciones"
+    )
+
+    
+class RegisterFormStep4(forms.Form):
+    antecedentes = forms.FileField(
+        required=False,
+        widget=MultiFileInput(attrs={'multiple': True}),
+        help_text="Puedes subir varios archivos PDF o imágenes"
+    )
+
 
 # Movido fuera de la clase para evitar errores de sintaxis
 email = forms.EmailField(

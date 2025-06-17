@@ -1,21 +1,22 @@
+<!-- PERFIL ORGANIZADO POR TABS CON CAMPOS COMPLETOS -->
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LLamkay.pe - Mi Perfil</title>
-    
+
     <!-- Estilos -->
     <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lobster&family=Playwrite+HU:wght@100..400&display=swap" rel="stylesheet">
-    
+
     <!-- Scripts -->
     <script src="{% static 'js/perfil.js' %}" defer></script>
     <script src="{% static 'js/guardarPerfil.js' %}" defer></script>
+    <script src="{% static 'js/tabs.js' %}" defer></script>
 </head>
 <body>
     <!-- NAVBAR -->
@@ -34,12 +35,6 @@
 
             <label for="foto">Foto de perfil:</label>
             <input type="file" name="foto" id="foto">
-
-            <label for="nombres">Nombres:</label>
-            <input type="text" name="nombres" id="nombres" value="{{ usuario.nombres }}" required>
-
-            <label for="apellidos">Apellidos:</label>
-            <input type="text" name="apellidos" id="apellidos" value="{{ usuario.apellidos }}" required>
 
             <label for="telefono">Teléfono:</label>
             <input type="text" name="telefono" id="telefono" value="{{ usuario.telefono }}">
@@ -64,7 +59,6 @@
             </div>
         </form>
     </div>
-            
 
     <!-- CONTENIDO PRINCIPAL -->
     <div class="container">
@@ -84,11 +78,20 @@
                     <h1>{{ usuario.nombres }} {{ usuario.apellidos }}</h1>
                     <p>📧 {{ usuario.email }}</p>
                     <p>👤 {{ usuario.username }}</p>
+                    <span class="info-label">👥 Tipo de usuario:</span>
+                    <span class="info-value">
+                        {% if tipo_usuario == "trabajador" %}Trabajador
+                        {% elif tipo_usuario == "empleador" %}Empleador
+                        {% elif tipo_usuario == "trabajador_empleador" %}Trabajador y Empleador
+                        {% elif tipo_usuario == "empresa" %}Empresa
+                        {% else %}No especificado
+                        {% endif %}
+                    </span>
                     <p>📍 
                         {% if profile.id_distrito %}{{ profile.id_distrito.nombre }}{% else %}Distrito no especificado{% endif %},
                         {% if profile.id_provincia %}{{ profile.id_provincia.nombre }}{% else %}Provincia no especificada{% endif %}
                     </p>
-                    <p>🔍 Miembro desde {{ profile.fecha_registro|date:"F Y" }}
+                    <p>🔍 Miembro desde {{ profile.fecha_registro|date:"F Y" }}</p>
 
                     <div class="profile-badges">
                         <div class="profile-badge badge-verified">✅ Perfil Verificado</div>
@@ -105,42 +108,27 @@
             </div>
         </div>
 
-        <!-- TABS -->
+        <!-- PESTAÑAS -->
         <div class="tabs">
-            <button class="tab active" onclick="showTab('general')">📊 General</button>
-            <button class="tab" onclick="showTab('skills')">🚰 Servicios</button>
-            <button class="tab" onclick="showTab('portfolio')">📸 Trabajos</button>
-            <button class="tab" onclick="showTab('history')">📋 Historial</button>
+            <button class="tab active" data-tab="general">📊 General</button>
+            <button class="tab" data-tab="skills">🛠️ Servicios</button>
+            <button class="tab" data-tab="portfolio">📸 Portafolio</button>
+            <button class="tab" data-tab="experience">💼 Experiencia</button>
+            <button class="tab" data-tab="certifications">🎓 Certificaciones</button>
+            <button class="tab" data-tab="history">📋 Historial</button>
         </div>
 
-        <!-- CONTENIDO GENERAL -->
+        <!-- TAB GENERAL -->
         <div id="general" class="tab-content active">
-            <div class="cards-grid">
-
-                <!-- Información Personal -->
+            <div class="cards-grid-split">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-title-group">
-                            <div class="card-icon">👤</div>
-                            <h2 class="card-title">Información Personal</h2>
-                        </div>
-                        <a href="#" class="card-action">Editar</a>
-                    </div>
-                    <div class="info-item"><span class="info-label">Nombre completo:</span><span class="info-value">{{ usuario.nombres }} {{ usuario.apellidos }}</span></div>
-                    <div class="info-item"><span class="info-label">Teléfono:</span><span class="info-value">{{ usuario.telefono|default:"No especificado" }}</span></div>
-                    <div class="info-item"><span class="info-label">Distrito:</span><span class="info-value">{% if profile.id_distrito %}{{ profile.id_distrito.nombre }}{% else %}No especificado{% endif %}</span></div>
-                    <div class="info-item"><span class="info-label">Disponibilidad:</span><span class="info-value">{{ disponibilidad|default:"No especificada" }}</span></div>
-                    <div class="info-item"><span class="info-label">Precio por hora (S/):</span><span class="info-value">{% if precio_hora %}S/ {{ precio_hora|floatformat:2 }}{% else %}No especificado{% endif %}</span></div>
+                    <h2>Información Personal</h2>
+                    <p><strong>Teléfono:</strong> {{ usuario.telefono|default:"No especificado" }}</p>
+                    <p><strong>Disponibilidad:</strong> {{ disponibilidad|default:"No especificada" }}</p>
+                    <p><strong>Precio por hora:</strong> {% if precio_hora %}S/ {{ precio_hora|floatformat:2 }}{% else %}No especificado{% endif %}</p>
                 </div>
-
-                <!-- Rendimiento -->
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-title-group">
-                            <div class="card-icon">📊</div>
-                            <h2 class="card-title">Mi Rendimiento</h2>
-                        </div>
-                    </div>
+                    <h2>Mi Rendimiento</h2>
                     <div class="stats-grid">
                         <div class="stat-card"><div class="stat-number">{{ estadisticas.trabajos_realizados }}</div><div class="stat-label">Trabajos Realizados</div></div>
                         <div class="stat-card"><div class="stat-number">{{ estadisticas.trabajos_activos }}</div><div class="stat-label">Trabajos Activos</div></div>
@@ -150,42 +138,85 @@
                         <div class="stat-card"><div class="stat-number">S/ {{ estadisticas.ingresos_mes }}</div><div class="stat-label">Ingresos del Mes</div></div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Sobre Mí -->
-                <div class="card" style="grid-column: 1/-1;">
-                    <div class="card-header">
-                        <div class="card-title-group">
-                            <div class="card-icon">💬</div>
-                            <h2 class="card-title">Sobre Mí</h2>
-                        </div>
-                        <a href="#" class="card-action">Editar</a>
-                    </div>
-                    <p style="line-height: 1.6; color: #666;">
-                        {{ profile.bio|default:"Sin descripción aún." }}
-                    </p>
-                </div>
+            <div class="card full-width">
+                <h2>Sobre Mí</h2>
+                <p>{{ profile.bio|default:"Sin descripción aún." }}</p>
+            </div>
+        </div>
+        
+        <!-- TAB SKILLS -->
+        <div id="skills" class="tab-content">
+            <div class="card">
+                <h2>Servicios Ofrecidos</h2>
+                {% for habilidad in habilidades %}
+                    <p>✅ {{ habilidad.nombre }}</p>
+                {% empty %}
+                    <p>No has registrado servicios aún.</p>
+                {% endfor %}
+            </div>
+        </div>
 
-                <!-- Actividad Reciente -->
-                <div class="card" style="grid-column: 1/-1;">
-                    <div class="card-header">
-                        <div class="card-title-group">
-                            <div class="card-icon">⚡</div>
-                            <h2 class="card-title">Actividad Reciente</h2>
-                        </div>
-                        <a href="#" class="card-action">Ver todo</a>
-                    </div>
-                    {% for actividad in actividades %}
-                        <div class="info-item">
-                            <span class="info-label">{{ actividad.icono }} {{ actividad.descripcion }}</span>
-                            <span class="info-value">{{ actividad.fecha|timesince }} atrás</span>
-                        </div>
-                    {% empty %}
-                        <p>No hay actividad reciente.</p>
-                    {% endfor %}
-                </div>
+        <!-- TAB PORTAFOLIO -->
+        <div id="portfolio" class="tab-content">
+            <div class="card">
+                <h2>Portafolio Profesional</h2>
+                {% if trabajos or certificaciones %}
+                    <h3>📌 Certificaciones</h3>
+                    <ul>
+                        {% for cert in certificaciones %}
+                            <li>
+                                <strong>{{ cert.descripcion }}</strong> ({{ cert.fecha_subida|date:"Y" }})
+                                - <a href="{{ cert.archivo.url }}" target="_blank">Ver documento</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
 
-            </div> <!-- cards-grid -->
-        </div> <!-- #general -->
-    </div> <!-- .container -->
+                    <h3>🛠️ Trabajos Aplicados en Llamkay</h3>
+                    <ul>
+                        {% for trabajo in trabajos %}
+                            <li>
+                                <strong>{{ trabajo.titulo }}</strong>: {{ trabajo.descripcion }}
+                                {% if trabajo.imagen %}<br><img src="{{ trabajo.imagen.url }}" alt="Imagen del trabajo" style="max-width: 200px; margin-top: 5px;">{% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No hay elementos en tu portafolio aún. Sube certificaciones o aplica a trabajos para generarlo automáticamente.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- TAB CALIFICACIONES -->
+        
+
+
+        <!-- TAB CERTIFICACIONES -->
+        <div id="certifications" class="tab-content">
+            <div class="card">
+                <h2>Certificaciones</h2>
+                {% for cert in certificaciones %}
+                    <p>📄 <strong>{{ cert.descripcion }}</strong> ({{ cert.fecha_subida|date:"Y" }})</p>
+                    <a href="{{ cert.archivo.url }}" target="_blank">Ver archivo</a>
+                {% empty %}
+                    <p>No has subido certificaciones aún.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- TAB HISTORIAL -->
+        <div id="history" class="tab-content">
+            <div class="card">
+                <h2>Actividad Reciente</h2>
+                {% for actividad in actividades %}
+                    <p>⚡ {{ actividad.icono }} {{ actividad.descripcion }} - {{ actividad.fecha|timesince }} atrás</p>
+                {% empty %}
+                    <p>No hay actividad reciente.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
 </body>
 </html>

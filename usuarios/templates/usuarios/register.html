@@ -16,7 +16,7 @@
     <div class="form-box">
       <div class="logo"><h2>Llamkay</h2></div>
       <h3>Crear cuenta</h3>
-      <p class="subtitle">Paso 1 de 3: Información Personal</p>
+      <p class="subtitle">Paso 1 de 4: Información Personal</p>
 
       {% if form.non_field_errors %}
         <div class="alert-error">
@@ -28,6 +28,7 @@
 
       <div class="progress-bar">
         <div class="progress active"></div>
+        <div class="progress"></div>
         <div class="progress"></div>
         <div class="progress"></div>
       </div>
@@ -147,22 +148,36 @@
 
           <div class="form-group password">
             <label for="{{ form.password1.id_for_label }}">Contraseña *</label>
-            <input type="password" 
-                   name="password1" 
-                   id="{{ form.password1.id_for_label }}"
-                   placeholder="Ingresa tu contraseña"
-                   required>
-            {% if form.password1.errors %}<div class="error-message">{{ form.password1.errors.0 }}</div>{% endif %}
+            <div class="password-wrapper toggle-password">
+              <input type="password" 
+                    name="password1" 
+                    id="{{ form.password1.id_for_label }}"
+                    class="password-input"
+                    placeholder="Ingresa tu contraseña"
+                    required>
+              <img src="{% static 'images/ojo-abierto.png' %}" class="eye-open" alt="Mostrar contraseña">
+              <img src="{% static 'images/ojo-cerrado.png' %}" class="eye-closed" style="display: none;" alt="Ocultar contraseña">
+            </div>
+            {% if form.password1.errors %}
+              <div class="error-message">{{ form.password1.errors.0 }}</div>
+            {% endif %}
           </div>
 
           <div class="form-group password">
             <label for="{{ form.password2.id_for_label }}">Confirmar contraseña *</label>
-            <input type="password" 
-                   name="password2" 
-                   id="{{ form.password2.id_for_label }}"
-                   placeholder="Confirma tu contraseña"
-                   required>
-            {% if form.password2.errors %}<div class="error-message">{{ form.password2.errors.0 }}</div>{% endif %}
+            <div class="password-wrapper toggle-password">
+              <input type="password" 
+                    name="password2" 
+                    id="{{ form.password2.id_for_label }}"
+                    class="password-input"
+                    placeholder="Confirma tu contraseña"
+                    required>
+              <img src="{% static 'images/ojo-abierto.png' %}" class="eye-open" alt="Mostrar contraseña">
+              <img src="{% static 'images/ojo-cerrado.png' %}" class="eye-closed" style="display: none;" alt="Ocultar contraseña">
+            </div>
+            {% if form.password2.errors %}
+              <div class="error-message">{{ form.password2.errors.0 }}</div>
+            {% endif %}
           </div>
 
           <div class="form-group checkbox">

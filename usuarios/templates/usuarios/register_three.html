@@ -2,68 +2,84 @@
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8" />
-    <title>Crear cuenta de trabajador</title>
+    <title>Registro - Llamkay</title>
     <link rel="stylesheet" href="{% static 'css/register_three.css' %}" />
 </head>
-
 <body>
     <div class="container">
-        <div class="logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Logo" width="40" />
-            <h2>TrabajApp</h2>
-        </div>
-        <h1>Crear cuenta de trabajador</h1>
-        <p class="paso">Paso 3 de 3: Perfil Profesional</p>
-
-        <div class="progress-steps">
-            <div class="step filled"></div>
-            <div class="step filled"></div>
-            <div class="step filled"></div>
-        </div>
-
         <div class="form-box">
+            <!-- Logo dentro del contenedor blanco -->
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Logo" width="40" />
+                <h2>TrabajApp</h2>
+            </div>
+            
+            <!-- Título dentro del contenedor blanco -->
+            <h1>Crear cuenta de trabajador</h1>
+            <p class="paso">Paso 3 de 4: Perfil Profesional</p>
+
+            <!-- Barra de progreso dentro del contenedor blanco -->
+            <div class="progress-bar">
+                <div class="step-bar active"></div>
+                <div class="step-bar active"></div>
+                <div class="step-bar active"></div>
+                <div class="step-bar"></div>
+            </div>
+
             <h2>Perfil Profesional</h2>
             <p>Cuéntanos sobre tus habilidades</p>
 
-            <form method="post" novalidate>
-                {% csrf_token %}
+            <form method="post" enctype="multipart/form-data">
+                <label for="id_habilidades">Habilidades y oficios *</label>
+                <textarea id="id_habilidades" name="habilidades" required placeholder="Describe tus habilidades y oficios principales..."></textarea>
 
-                <label for="{{ form.habilidades.id_for_label }}">Habilidades y oficios *</label>
-                {{ form.habilidades }}
-                {% if form.habilidades.errors %}
-                    <div class="error-message">{{ form.habilidades.errors.0 }}</div>
-                {% endif %}
+                <label for="id_experiencia">Experiencia</label>
+                <textarea id="id_experiencia" name="experiencia" placeholder="Describe tu experiencia laboral..."></textarea>
 
-                <label for="{{ form.experiencia.id_for_label }}">Experiencia</label>
-                {{ form.experiencia }}
-                {% if form.experiencia.errors %}
-                    <div class="error-message">{{ form.experiencia.errors.0 }}</div>
-                {% endif %}
+                <label for="id_disponibilidad">Disponibilidad *</label>
+                <select id="id_disponibilidad" name="disponibilidad" required>
+                    <option value="">Selecciona tu disponibilidad</option>
+                    <option value="tiempo_completo">Tiempo completo</option>
+                    <option value="medio_tiempo">Medio tiempo</option>
+                    <option value="por_horas">Por horas</option>
+                    <option value="fines_semana">Fines de semana</option>
+                    <option value="flexible">Flexible</option>
+                </select>
 
-                <label for="{{ form.disponibilidad.id_for_label }}">Disponibilidad *</label>
-                {{ form.disponibilidad }}
-                {% if form.disponibilidad.errors %}
-                    <div class="error-message">{{ form.disponibilidad.errors.0 }}</div>
-                {% endif %}
+                <label for="id_tarifa">Tarifa por hora (opcional)</label>
+                <input type="number" id="id_tarifa" name="tarifa" step="0.01" placeholder="Ej: 15.50">
 
-                <label for="{{ form.tarifa.id_for_label }}">Tarifa por hora (opcional)</label>
-                {{ form.tarifa }}
-                {% if form.tarifa.errors %}
-                    <div class="error-message">{{ form.tarifa.errors.0 }}</div>
-                {% endif %}
+                <label for="id_estudios">Nivel de estudios *</label>
+                <select id="id_estudios" name="estudios" required onchange="toggleCarreraField()">
+                    <option value="">Selecciona tu nivel de estudios</option>
+                    <option value="primaria">Primaria</option>
+                    <option value="secundaria">Secundaria</option>
+                    <option value="tecnico">Técnico</option>
+                    <option value="universitario">Universitario</option>
+                    <option value="posgrado">Posgrado</option>
+                </select>
+
+                <div id="field-carrera">
+                    <label for="id_carrera">Carrera universitaria (si aplica)</label>
+                    <input type="text" id="id_carrera" name="carrera" placeholder="Ej: Ingeniería Civil">
+                </div>
+
+                <label for="id_certificaciones">Certificaciones (PDF o imagen)</label>
+                <input type="file" name="certificaciones" id="id_certificaciones" accept=".pdf,image/*" multiple>
 
                 <div class="buttons">
-                    <a href="{% url 'usuarios:register_two' %}" class="btn-outline">Anterior</a>
-                    <button type="submit" class="btn-primary">Crear Cuenta</button>
+                    <a href="#" class="btn-outline">Anterior</a>
+                    <button type="submit" class="btn">Siguiente</button>
                 </div>
             </form>
 
-            <p class="login-link">¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a></p>
+            <p class="login-link">¿Ya tienes una cuenta? <a href="#">Inicia sesión aquí</a></p>
         </div>
     </div>
-</body>
 
+    <script src="{% static 'js/camposEstudios.js' %}"></script>
+    <script src="{% static 'js/subirArchivos.js' %}"></script>
+</body>
 </html>
