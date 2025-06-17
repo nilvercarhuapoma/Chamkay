@@ -1,0 +1,249 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #9EBC8A 0%, #B5C99A 100%);
+    color: #333;
+    min-height: 100vh;
+}
+
+.contenedor-login-demo {
+  position: relative;
+  height: 90vh;
+  width: 100%;
+  max-width: 900px; /* o el tamaño que quieras para todo el bloque */
+  margin: 0 auto; /* centra horizontalmente */
+  display: flex;
+  justify-content: space-between; /* pega los hijos a los extremos */
+  align-items: center; /* centra verticalmente si quieres */
+  padding: 2rem;
+}
+
+/* Cajas internas */
+.login-container,
+.demo-access {
+  width: 45%; /* o usa max-width si quieres */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.logo .icon {
+    font-size: 40px;
+}
+
+.logo h2 {
+    margin: 0.3rem 0;
+}
+
+h2 {
+    font-size: 30px;
+    color: black;
+    font-family: "Lilita One", sans-serif;
+    font-weight: normal;
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 0.3rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: #034D31;
+    margin-bottom: 1rem;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.options a {
+    color: #034D31;
+}
+
+.tab {
+    padding: 0.5rem 1rem;
+    background: #f3f3f3;
+    border: none;
+    margin: 0 5px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #034D31;
+    color: white;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+}
+
+/* ARREGLO DEL CONTENEDOR DEL PASSWORD */
+.password-container {
+    position: relative;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input[type="password"],
+.password-container input[type="text"] {
+    width: 100%;
+    padding: 0.6rem 40px 0.6rem 0.6rem; /* Espacio a la derecha para el ojito */
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 0; /* Quito el margin del input porque ya lo tiene el contenedor */
+    box-sizing: border-box;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%); /* Centrado perfecto */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.toggle-password img {
+    width: 20px;
+    height: 20px;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    width: 100%;
+    background: #034D31;
+    color: white;
+    padding: 0.7rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.demo-access {
+    text-align: center;
+}
+
+.btn-demo {
+    width: 100%;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 0.6rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.register {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+.register a {
+    color: #034D31;
+    text-decoration: none;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    color: #888;
+    text-decoration: none;
+}
+
+/* Contenedor personalizado del checkbox */
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  color: #333;
+  user-select: none;
+}
+
+/* Oculta el checkbox nativo y lo personaliza */
+.checkbox input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #9098a9;
+  border-radius: 3px;
+  background-color: #fff;
+  margin-right: 8px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Estilo cuando está marcado */
+.checkbox input[type="checkbox"]:checked {
+  background-color: #034D31;
+  border-color: #034D31;
+}
+
+/* Check visual */
+.checkbox input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.checkbox input[type="checkbox"]:checked::after {
+  opacity: 1;
+}

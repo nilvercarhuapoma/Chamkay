@@ -20,6 +20,9 @@ def index(request):
             {'name': 'Busco carpintero', 'image': 'engineering.jpg'},
             {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
             {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg'},
+            {'name': 'Busco carpintero', 'image': 'engineering.jpg'},
+            {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},
+            {'name': 'Busco trabajadores para entrega de agua', 'image': 'agua.jpg','text': 'Ubicación: Tingo Maria'},
         ],
         'ciudad': [
             {'name': 'Busco persona con ofimática', 'image': 'informatica.jpg'},

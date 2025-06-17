@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,9 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'trabajo_llamkay',
+    #'usuarios.apps.UsuariosConfig',
+
    
-    
-    
+
+    'trabajos',
+    'usuarios',
+    'chats',
+
+ 
 ]
 
 MIDDLEWARE = [
@@ -80,9 +87,12 @@ WSGI_APPLICATION = 'llamkay.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'llankay',
+
+        'NAME': 'llamkay',
         'USER': 'leimer',
         'PASSWORD': '12345',
+
+       
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -131,4 +141,22 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #modelos de apps
+
+# settings.py
+STATIC_URL = '/static/'
+
+# Solo si estás en desarrollo (fuera de producción)
+STATICFILES_DIRS = [ BASE_DIR / 'static' ]
+
+LOGIN_REDIRECT_URL = 'trabajo_llamkay:home' #redirección de usuarios con inicio de sesión a index
+
+#Acceder para subir fotos
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+
+ 
+
 

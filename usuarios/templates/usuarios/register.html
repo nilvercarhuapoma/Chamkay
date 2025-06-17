@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registro - Llamkay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Lobster&family=Playwrite+HU:wght@100..400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+</head>
+
+<body>
+    <div class="registro-container">
+        <div class="form-box">
+            <div class="logo">
+                <h2>Llamkay</h2>
+            </div>
+            <h3>Crear cuenta de trabajador</h3>
+            <p class="subtitle">Paso 1 de 3: Información Personal</p>
+
+            {% if form.non_field_errors %}
+                <div class="alert-error">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="progress-bar">
+                <div class="progress active"></div>
+                <div class="progress"></div>
+                <div class="progress"></div>
+            </div>
+
+            <form method="post" id="registerForm" novalidate>
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Información Personal</legend>
+                    <p class="form-subtitle">Ingresa tu información básica</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.nombre.id_for_label }}">Nombre *</label>
+                            {{ form.nombre }}
+                            {% if form.nombre.errors %}
+                                <div class="error-message">{{ form.nombre.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.apellido.id_for_label }}">Apellido *</label>
+                            {{ form.apellido }}
+                            {% if form.apellido.errors %}
+                                <div class="error-message">{{ form.apellido.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Correo electrónico *</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="error-message">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                        <div class="email-status" id="emailStatus"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.telefono.id_for_label }}">Teléfono *</label>
+                            {{ form.telefono }}
+                            {% if form.telefono.errors %}
+                                <div class="error-message">{{ form.telefono.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.dni.id_for_label }}">DNI *</label>
+                            {{ form.dni }}
+                            {% if form.dni.errors %}
+                                <div class="error-message">{{ form.dni.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group password">
+                        <label for="{{ form.password1.id_for_label }}">Contraseña *</label>
+                        {{ form.password1 }}
+                        <span class="toggle-password">
+                            <img class="eye-open" src="{% static 'images/ojo-abierto.png' %}" alt="Mostrar contraseña" />
+                            <img class="eye-closed" src="{% static 'images/ojo-cerrado.png' %}" alt="Ocultar contraseña" style="display:none;" />
+                        </span>
+                        {% if form.password1.errors %}
+                            <div class="error-message">{{ form.password1.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group password">
+                        <label for="{{ form.password2.id_for_label }}">Confirmar contraseña *</label>
+                        {{ form.password2 }}
+                        <span class="toggle-password">
+                            <img class="eye-open" src="{% static 'images/ojo-abierto.png' %}" alt="Mostrar contraseña" />
+                            <img class="eye-closed" src="{% static 'images/ojo-cerrado.png' %}" alt="Ocultar contraseña" style="display:none;" />
+                        </span>
+                        {% if form.password2.errors %}
+                            <div class="error-message">{{ form.password2.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group checkbox">
+                        <label>
+                            <input type="checkbox" name="acepto_terminos" required />
+                            Acepto los <a href="#">términos y condiciones</a> y la <a href="#">política de privacidad</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="submitBtn">Siguiente</button>
+                </fieldset>
+            </form>
+
+            <p class="login-link">¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+
+    <script src="{% static 'js/ojo-register.js' %}"></script>
+</body>
+
+</html>

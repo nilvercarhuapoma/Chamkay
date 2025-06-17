@@ -1,0 +1,69 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Crear cuenta de trabajador</title>
+    <link rel="stylesheet" href="{% static 'css/register_three.css' %}" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Logo" width="40" />
+            <h2>TrabajApp</h2>
+        </div>
+        <h1>Crear cuenta de trabajador</h1>
+        <p class="paso">Paso 3 de 3: Perfil Profesional</p>
+
+        <div class="progress-steps">
+            <div class="step filled"></div>
+            <div class="step filled"></div>
+            <div class="step filled"></div>
+        </div>
+
+        <div class="form-box">
+            <h2>Perfil Profesional</h2>
+            <p>Cuéntanos sobre tus habilidades</p>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <label for="{{ form.habilidades.id_for_label }}">Habilidades y oficios *</label>
+                {{ form.habilidades }}
+                {% if form.habilidades.errors %}
+                    <div class="error-message">{{ form.habilidades.errors.0 }}</div>
+                {% endif %}
+
+                <label for="{{ form.experiencia.id_for_label }}">Experiencia</label>
+                {{ form.experiencia }}
+                {% if form.experiencia.errors %}
+                    <div class="error-message">{{ form.experiencia.errors.0 }}</div>
+                {% endif %}
+
+                <label for="{{ form.disponibilidad.id_for_label }}">Disponibilidad *</label>
+                {{ form.disponibilidad }}
+                {% if form.disponibilidad.errors %}
+                    <div class="error-message">{{ form.disponibilidad.errors.0 }}</div>
+                {% endif %}
+
+                <label for="{{ form.tarifa.id_for_label }}">Tarifa por hora (opcional)</label>
+                {{ form.tarifa }}
+                {% if form.tarifa.errors %}
+                    <div class="error-message">{{ form.tarifa.errors.0 }}</div>
+                {% endif %}
+
+                <div class="buttons">
+                    <a href="{% url 'usuarios:register_two' %}" class="btn-outline">Anterior</a>
+                    <button type="submit" class="btn-primary">Crear Cuenta</button>
+                </div>
+            </form>
+
+            <p class="login-link">¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

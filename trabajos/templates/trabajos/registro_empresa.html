@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oferta Laboral</title>
+  <link rel="stylesheet" href="{% static 'css/registro_empresa.css' %}" />
+  <style>
+    .image-preview {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .form-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    .btn-volver {
+      background-color: #e5e7eb;
+      color: #111827;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .btn-volver:hover {
+      background-color: #d1d5db;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    
+    <!-- Botón Volver -->
+    <a href="{% url 'trabajos:index_trabajo' %}" class="btn-volver">← Volver</a>
+
+    <h2>💼 Oferta Laboral</h2>
+    <p>Detalles del puesto disponible para primer trabajo</p>
+
+    <form onsubmit="return validarUbicacion();">
+      <label>Título del Puesto *</label>
+      <input type="text" placeholder="Ej: Asistente Administrativo, Trainee de Ventas" required />
+
+      <label>Rango Salarial *</label>
+      <input type="text" placeholder="Ej: $25,000 - $35,000 MXN/mes" required />
+
+      <label>Experiencia Requerida *</label>
+      <select required>
+        <option value="">Nivel de experiencia</option>
+        <option>Sin experiencia</option>
+        <option>1-2 años</option>
+        <option>3-5 años</option>
+        <option>5+ años</option>
+      </select>
+
+      <label>Modalidad de Trabajo *</label>
+      <select required>
+        <option value="">Seleccione la modalidad</option>
+        <option>Presencial</option>
+        <option>Remoto</option>
+        <option>Híbrido</option>
+      </select>
+
+      <label>Descripción del Puesto *</label>
+      <textarea placeholder="Describa las responsabilidades, tareas principales y objetivos del puesto..." required></textarea>
+
+      <label>Requisitos y Calificaciones *</label>
+      <textarea placeholder="Mencione los requisitos educativos, habilidades técnicas y competencias necesarias..." required></textarea>
+
+      <label>Beneficios y Compensaciones *</label>
+      <textarea placeholder="Describa los beneficios adicionales, prestaciones, oportunidades de crecimiento..." required></textarea>
+
+      <label>Fecha Límite de Postulación *</label>
+      <input type="date" required />
+
+      <label>Número de Postulantes Esperado</label>
+      <input type="number" min="1" placeholder="Ej: 10" />
+
+      <label>Ubicación (al menos uno requerido) *</label>
+      <input type="text" id="departamento" placeholder="Departamento" />
+      <input type="text" id="ciudad" placeholder="Ciudad" />
+      <input type="text" id="distrito" placeholder="Distrito" />
+      <input type="text" id="comunidad" placeholder="Comunidad" />
+
+      <label>Descripción de la Dirección (Opcional)</label>
+      <input type="text" placeholder="Describa la ubicación del lugar de trabajo" />
+
+      <label>Imagen del Puesto (Opcional)</label>
+      <input type="file" accept="image/*" onchange="previewImage(event)" />
+      <img id="preview" class="image-preview" style="display:none" />
+
+      <div class="form-buttons">
+        <button type="button" class="cancel" onclick="window.location.href='{% url 'trabajos:index_trabajo' %}'">Cancelar</button>
+        <button type="submit" class="submit">Publicar Oferta</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function validarUbicacion() {
+      const departamento = document.getElementById('departamento').value.trim();
+      const ciudad = document.getElementById('ciudad').value.trim();
+      const distrito = document.getElementById('distrito').value.trim();
+      const comunidad = document.getElementById('comunidad').value.trim();
+
+      if (!departamento && !ciudad && !distrito && !comunidad) {
+        alert("Debe completar al menos uno de los campos de ubicación (Departamento, Ciudad, Distrito o Comunidad).");
+        return false;
+      }
+      return true;
+    }
+
+    function previewImage(event) {
+      const preview = document.getElementById('preview');
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</body>
+</html>

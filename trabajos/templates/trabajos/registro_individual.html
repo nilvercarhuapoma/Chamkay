@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Trabajo</title>
+    <link rel="stylesheet" href="{% static 'css/registro_individual.css' %}">
+    <script>
+        function volver() {
+            window.history.back();
+        }
+
+        function mostrarImagen(event) {
+            const imagenPreview = document.getElementById('preview-imagen');
+            const archivo = event.target.files[0];
+            if (archivo) {
+                const lector = new FileReader();
+                lector.onload = function(e) {
+                    imagenPreview.src = e.target.result;
+                    imagenPreview.style.display = 'block';
+                }
+                lector.readAsDataURL(archivo);
+            } else {
+                imagenPreview.src = '';
+                imagenPreview.style.display = 'none';
+            }
+        }
+
+        function validarFormulario(event) {
+            const departamento = document.getElementById("departamento").value.trim();
+            const ciudad = document.getElementById("ciudad").value.trim();
+            const distrito = document.getElementById("distrito").value.trim();
+            const comunidad = document.getElementById("comunidad").value.trim();
+
+            const hora = document.getElementById("hora").value;
+            const ampm = document.getElementById("ampm").value;
+
+            if (!departamento && !ciudad && !distrito && !comunidad) {
+                alert("Debes completar al menos uno de los campos de dirección.");
+                event.preventDefault();
+                return false;
+            }
+
+            if (!hora || !ampm) {
+                alert("Debes seleccionar al menos la hora y AM/PM.");
+                event.preventDefault();
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body class="fondo">
+    <div class="formulario">
+
+        <div class="volver">
+            <button onclick="volver()">← Volver</button>
+        </div>
+
+        <h2>Información del Trabajo</h2>
+        <p>Detalles sobre tu oferta de trabajo</p>
+
+        <form enctype="multipart/form-data" onsubmit="return validarFormulario(event)">
+            <!-- Título y Pago -->
+           
+            <div>
+                    <label>Título del Trabajo *</label>
+                    <input type="text" placeholder="Ej: Carpintero, Jardinero" required>
+            </div>
+            <div>
+                    <label>Pago (opcional)</label>
+                    <input type="number" placeholder="Ej: $1500.00">
+            </div>
+            
+
+             <div class="campo">
+                <label>Fecha Límite *</label>
+                <input type="date" required>
+            </div>
+
+            <!-- Hora Límite editable -->
+            <div class="fila">
+                <div>
+                    <label>Hora Límite *</label>
+                    <div class="hora-limite">
+                        <input list="lista-horas" id="hora" placeholder="Horas" required>
+                        <datalist id="lista-horas">
+                            {% for h in horas %}
+                                <option value="{{ h }}">
+                            {% endfor %}
+                        </datalist>
+
+                        <input list="lista-minutos" id="minuto" placeholder="Minutos">
+                        <datalist id="lista-minutos">
+                            {% for m in tiempos %}
+                                <option value="{{ m }}">
+                            {% endfor %}
+                        </datalist>
+
+                        <input list="lista-segundos" id="segundo" placeholder="Segundos">
+                        <datalist id="lista-segundos">
+                            {% for s in tiempos %}
+                                <option value="{{ s }}">
+                            {% endfor %}
+                        </datalist>
+
+                        <input list="lista-ampm" id="ampm" placeholder="am/pm" required>
+                        <datalist id="lista-ampm">
+                            <option value="AM">
+                            <option value="PM">
+                        </datalist>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Descripción y herramientas -->
+            <div class="campo">
+                <label>Descripción del Trabajo (opcional)</label>
+                <textarea rows="3" placeholder="Describe las tareas que realizará..."></textarea>
+            </div>
+
+            <div class="campo">
+                <label>Herramientas *</label>
+                <textarea rows="2" placeholder="Ej: Taladro, Guantes, etc."></textarea>
+            </div>
+
+            <!-- Dirección (mínimo 1 campo obligatorio) -->
+            <div class="direccion">
+                <label>Departamento</label>
+                <input type="text" id="departamento" placeholder="Ej: Santa Cruz">
+
+                <label>Ciudad</label>
+                <input type="text" id="ciudad" placeholder="Ej: Montero">
+
+                <label>Distrito</label>
+                <input type="text" id="distrito" placeholder="Ej: Distrito 1">
+
+                <label>Comunidad</label>
+                <input type="text" id="comunidad" placeholder="Ej: Comunidad El Carmen">
+
+                <label>Descripción completa de la dirección (opcional)</label>
+                <textarea placeholder="Ej: Calle 7, frente al parque, zona norte"></textarea>
+            </div>
+
+            <!-- Foto -->
+            <div class="campo foto-opcional">
+                <label>Foto Opcional:</label>
+                <input type="file" accept="image/*" onchange="mostrarImagen(event)">
+                <img id="preview-imagen" src="" alt="Vista previa" style="margin-top:10px; max-width:100%; display:none; border:1px solid #ccc; border-radius:8px;">
+            </div>
+
+            <div class="boton">
+                <button type="submit">Completar Registro</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
