@@ -1,42 +1,47 @@
+/* Reset y configuración base */
 * {
     box-sizing: border-box;
 }
 
 body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #F5ECD5;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #9EBC8A 0%, #B5C99A 100%);
-    color: #333;
     min-height: 100vh;
+    padding: 1rem;
+    overflow-x: hidden;
 }
 
+/* Contenedor principal */
 .contenedor-login-demo {
-  position: relative;
-  height: 90vh;
-  width: 100%;
-  max-width: 900px; /* o el tamaño que quieras para todo el bloque */
-  margin: 0 auto; /* centra horizontalmente */
-  display: flex;
-  justify-content: space-between; /* pega los hijos a los extremos */
-  align-items: center; /* centra verticalmente si quieres */
-  padding: 2rem;
+    position: relative;
+    height: 90vh;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
 }
 
-/* Cajas internas */
-.login-container,
-.demo-access {
-  width: 45%; /* o usa max-width si quieres */
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+/* Contenedor del login */
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    box-sizing: border-box;
 }
 
+/* Logo y títulos */
 .logo {
     text-align: center;
     margin-bottom: 1rem;
@@ -48,66 +53,88 @@ body {
 
 .logo h2 {
     margin: 0.3rem 0;
-}
-
-h2 {
-    font-size: 30px;
-    color: black;
     font-family: "Lilita One", sans-serif;
     font-weight: normal;
+    color: #2d3748;
 }
 
 h3 {
+    color: #2d3748;
     text-align: center;
-    margin-bottom: 0.3rem;
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
 }
 
 .subtitle {
     text-align: center;
-    color: #034D31;
-    margin-bottom: 1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
 }
 
+/* Mensajes de error */
+.error-message {
+    color: #e53e3e;
+    background-color: rgba(229, 62, 62, 0.1);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e53e3e;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Tabs mejoradas */
 .tabs {
     display: flex;
     justify-content: center;
-    margin-bottom: 1rem;
-}
-
-.options a {
-    color: #034D31;
+    margin-bottom: 1.5rem;
 }
 
 .tab {
-    padding: 0.5rem 1rem;
-    background: #f3f3f3;
-    border: none;
+    padding: 10px 20px;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
     margin: 0 5px;
-    border-radius: 6px;
+    border-radius: 10px;
     cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    color: #4a5568;
+}
+
+.tab:hover {
+    border-color: #626F47;
+    background: #f1f5f9;
 }
 
 .tab.active {
-    background: #034D31;
+    background: #626F47;
     color: white;
+    border-color: #626F47;
+    box-shadow: 0 2px 4px rgba(98, 111, 71, 0.2);
 }
 
-label {
-    display: block;
-    margin-bottom: 0.3rem;
-    font-weight: bold;
-}
-
-input[type="email"],
-input[type="password"] {
+/* Inputs mejorados */
+input[type="email"] {
     width: 100%;
-    padding: 0.6rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
     margin-bottom: 1rem;
 }
 
-/* ARREGLO DEL CONTENEDOR DEL PASSWORD */
+input[type="email"]:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Contenedor de contraseña mejorado */
 .password-container {
     position: relative;
     margin-bottom: 1rem;
@@ -118,24 +145,42 @@ input[type="password"] {
 .password-container input[type="password"],
 .password-container input[type="text"] {
     width: 100%;
-    padding: 0.6rem 40px 0.6rem 0.6rem; /* Espacio a la derecha para el ojito */
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    margin-bottom: 0; /* Quito el margin del input porque ya lo tiene el contenedor */
+    padding: 12px 50px 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0;
     box-sizing: border-box;
 }
 
+.password-container input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Toggle de contraseña mejorado */
 .toggle-password {
     position: absolute;
     top: 50%;
-    right: 10px;
-    transform: translateY(-50%); /* Centrado perfecto */
+    right: 15px;
+    transform: translateY(-50%);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 10;
     pointer-events: auto;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
 }
 
 .toggle-password img {
@@ -143,107 +188,229 @@ input[type="password"] {
     height: 20px;
 }
 
+/* Opciones mejoradas */
 .options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-size: 0.9rem;
 }
 
+.options a {
+    color: #626F47;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.options a:hover {
+    text-decoration: underline;
+}
+
+/* Checkbox personalizado mejorado */
+.checkbox {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+    color: #4a5568;
+    user-select: none;
+}
+
+.checkbox input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #9098a9;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.checkbox input[type="checkbox"]:hover {
+    border-color: #626F47;
+    transform: scale(1.05);
+}
+
+.checkbox input[type="checkbox"]:checked {
+    background-color: #626F47;
+    border-color: #626F47;
+}
+
+.checkbox input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(98, 111, 71, 0.2);
+}
+
+.checkbox input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 4px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.checkbox input[type="checkbox"]:checked::after {
+    opacity: 1;
+}
+
+/* Botón principal mejorado */
 .btn-primary {
     width: 100%;
-    background: #034D31;
+    padding: 12px 0;
+    background: #626F47;
     color: white;
-    padding: 0.7rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
     font-weight: bold;
+    font-size: 1rem;
     cursor: pointer;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(98, 111, 71, 0.2);
 }
 
-.demo-access {
-    text-align: center;
+.btn-primary:hover {
+    background: #4a5635;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(98, 111, 71, 0.3);
 }
 
-.btn-demo {
-    width: 100%;
-    background: #f5f5f5;
-    border: 1px solid #ddd;
-    padding: 0.6rem;
-    border-radius: 6px;
-    margin-top: 0.5rem;
-    cursor: pointer;
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(98, 111, 71, 0.2);
 }
 
+/* Enlaces mejorados */
 .register {
     text-align: center;
     font-size: 0.9rem;
     margin-top: 1rem;
+    color: #666;
 }
 
 .register a {
-    color: #034D31;
+    color: #626F47;
     text-decoration: none;
+    font-weight: 500;
+}
+
+.register a:hover {
+    text-decoration: underline;
 }
 
 .back {
     display: block;
     text-align: center;
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
-    color: #888;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.back:hover {
+    color: #626F47;
     text-decoration: none;
 }
 
-/* Contenedor personalizado del checkbox */
-.checkbox {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  font-family: sans-serif;
-  font-size: 0.9rem;
-  color: #333;
-  user-select: none;
+/* Acceso demo (si se usa) */
+.demo-access {
+    width: 45%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    text-align: center;
 }
 
-/* Oculta el checkbox nativo y lo personaliza */
-.checkbox input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 1.5px solid #9098a9;
-  border-radius: 3px;
-  background-color: #fff;
-  margin-right: 8px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.btn-demo {
+    width: 100%;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-/* Estilo cuando está marcado */
-.checkbox input[type="checkbox"]:checked {
-  background-color: #034D31;
-  border-color: #034D31;
+.btn-demo:hover {
+    border-color: #626F47;
+    background: #f1f5f9;
+    transform: translateY(-1px);
 }
 
-/* Check visual */
-.checkbox input[type="checkbox"]::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 4px;
-  height: 9px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-  opacity: 0;
-  transition: opacity 0.2s;
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 0.5rem;
+    }
+    
+    .contenedor-login-demo {
+        padding: 1rem;
+    }
+    
+    .login-container {
+        padding: 1.5rem;
+        margin: 10px;
+        border-radius: 8px;
+        max-width: none;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .tab {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    input[type="email"],
+    .password-container input {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+    
+    .password-container input {
+        padding: 10px 45px 10px 12px;
+    }
 }
 
-.checkbox input[type="checkbox"]:checked::after {
-  opacity: 1;
+@media (max-width: 480px) {
+    .login-container {
+        padding: 1rem;
+    }
+    
+    .logo h2 {
+        font-size: 1.8rem;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+    
+    .options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
 }

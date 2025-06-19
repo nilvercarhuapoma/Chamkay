@@ -33,7 +33,6 @@
           {% csrf_token %}
           <div class="tabs">
             <button type="button" class="tab active">📧 Email</button>
-            <button type="button" class="tab">📱 Teléfono</button>
           </div>
 
           <input type="email" id="email" name="email" placeholder="tu@email.com" required>
@@ -57,18 +56,10 @@
           <button type="submit" class="btn-primary">Iniciar Sesión</button>
         </form>
 
-        <p class="register">¿No tienes una cuenta? <a href="{% url 'usuarios:register' %}">Regístrate aquí</a></p>
+        <p class="register">¿No tienes una cuenta? <a href="{% url 'usuarios:seleccionar_tipo' %}">Regístrate aquí</a></p>
         <a href="/" class="back"> ← Volver al inicio</a>
       </div>
     </div>
-
-    <div class="demo-access">
-      <p>Acceso rápido para demo:</p>
-      <button class="btn-demo">Demo: Trabajador</button>
-      <button class="btn-demo">Demo: Empleador</button>
-      <button class="btn-demo">Demo: Administrador</button>
-    </div>
-  </div>
 
   <script src="{% static 'js/ojo-script.js' %}"></script>
 </body>

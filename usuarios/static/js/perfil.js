@@ -357,7 +357,6 @@ function editProfile() {
     
     // Aquí implementarías la lógica para editar el perfil
     // Por ejemplo, abrir un modal o redirigir a una página de edición
-    alert('Función de edición en desarrollo. Se abrirá un modal de edición.');
     
     // Ejemplo de lo que podrías hacer:
     // openEditModal();
@@ -371,7 +370,7 @@ function editProfile() {
 function initializeHoverEffects() {
     console.log('✨ Inicializando efectos de hover...');
     
-    // Efectos para cards
+    // Efectos para cards - usando los mismos valores que perfil.css
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
         card.addEventListener('mouseenter', function() {
@@ -385,15 +384,19 @@ function initializeHoverEffects() {
         });
     });
     
-    // Efectos para stat cards
+    // Efectos para stat cards - consistente con perfil.css
     const statCards = document.querySelectorAll('.stat-card');
     statCards.forEach(stat => {
         stat.addEventListener('mouseenter', function() {
             this.style.transform = 'scale(1.05)';
+            this.style.borderColor = '#07734B'; // Color verde principal
+            this.style.background = '#fff7ed';
         });
         
         stat.addEventListener('mouseleave', function() {
             this.style.transform = 'scale(1)';
+            this.style.borderColor = '#DEF9C4';
+            this.style.background = '#fef7ed';
         });
     });
 }
@@ -418,42 +421,47 @@ function initializeTooltips() {
 window.showTab = showTab;
 window.editProfile = editProfile;
 
-// Agregar estilos CSS adicionales para las animaciones
+// Agregar estilos CSS adicionales coherentes con perfil.css
 const additionalStyles = `
     .tab-content {
         transition: opacity 0.3s ease;
+        opacity: 0;
     }
     
     .tab-content.active {
         opacity: 1;
     }
     
-    .tab-content:not(.active) {
-        opacity: 0;
-    }
-    
     .card {
         transition: all 0.3s ease;
+        transform: translateY(0);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     }
     
     .stat-card {
         transition: all 0.3s ease;
+        transform: scale(1);
+        border-color: #DEF9C4;
+        background: #fef7ed;
     }
     
     .work-item {
         transition: all 0.3s ease;
+        opacity: 1;
+        transform: translateX(0);
     }
     
     .loading-message {
         text-align: center;
         padding: 2rem;
         color: #666;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     }
     
     .spinner {
         width: 40px;
         height: 40px;
-        border: 4px solid #f3f3f3;
+        border: 4px solid #DEF9C4;
         border-top: 4px solid #07734B;
         border-radius: 50%;
         animation: spin 1s linear infinite;
@@ -463,6 +471,26 @@ const additionalStyles = `
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+    
+    /* Efectos de skill tags consistentes */
+    .skill-tag {
+        transition: transform 0.3s ease;
+        transform: scale(1);
+    }
+    
+    /* Efectos de portfolio items */
+    .portfolio-item {
+        transition: all 0.3s ease;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Botones con estilo consistente */
+    button[type="submit"]:disabled {
+        background: #9CDBA6 !important;
+        cursor: not-allowed !important;
+        opacity: 0.7;
     }
 `;
 

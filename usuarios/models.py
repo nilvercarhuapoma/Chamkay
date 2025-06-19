@@ -1,8 +1,72 @@
 #hagan un python manage.py makemigrations usuarios
 #luego: python manage.py migrate
 
+#en pg admin ALTER TYPE tipo_usuario_enum ADD VALUE 'empleador';
+
+
 from django.db import models
 from django.contrib.auth.models import User
+
+
+
+class Departamento(models.Model):
+    id_departamento = models.IntegerField(primary_key=True)
+    nombre = models.CharField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'departamento'
+    
+    def __str__(self):
+        return self.nombre
+    
+    
+class Provincia(models.Model):
+    id_provincia = models.IntegerField(primary_key=True)
+    id_departamento = models.ForeignKey(Departamento, models.DO_NOTHING, db_column='id_departamento', blank=True, null=True)
+    nombre = models.CharField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'provincia'
+
+
+class Distrito(models.Model):
+    id_distrito = models.IntegerField(primary_key=True)
+    id_provincia = models.ForeignKey('Provincia', models.DO_NOTHING, db_column='id_provincia', blank=True, null=True)
+    nombre = models.CharField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'distrito'
+        
+
+class Comunidad(models.Model):
+    id_comunidad = models.IntegerField(primary_key=True)
+    id_distrito = models.ForeignKey('Distrito', models.DO_NOTHING, db_column='id_distrito', blank=True, null=True)
+    nombre = models.CharField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'comunidad'
+        
+
+class Usuario(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil') #para mantener la personalizacion
+    
+    id_usuario = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=150, blank=False, null=False)
+    nombres = models.CharField(blank=True, null=True)
+    apellidos = models.CharField(blank=True, null=True)
+    dni = models.CharField(blank=True, null=True)
+    telefono = models.CharField(blank=True, null=True)
+    direccion = models.TextField(blank=True, null=True)
+    email = models.CharField(blank=True, null=True)
+    clave = models.TextField(blank=True, null=True)
+    fecha_nacimiento = models.DateField(blank=True, null=True)
+    sexo = models.CharField(blank=True, null=True)
+    tipo_usuario = models.TextField(blank=True, null=True)  # This field type is a guess.
+    id_comunidad = models.ForeignKey(Comunidad, models.DO_NOTHING, db_column='id_comunidad', blank=True, null=True)
+    habilitado = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'usuario'
 
 class ActividadReciente(models.Model):
     usuario = models.ForeignKey('Usuario', models.DO_NOTHING)
@@ -45,15 +109,6 @@ class Categoriatrabajo(models.Model):
         db_table = 'categoriatrabajo'
 
 
-class Comunidad(models.Model):
-    id_comunidad = models.IntegerField(primary_key=True)
-    id_distrito = models.ForeignKey('Distrito', models.DO_NOTHING, db_column='id_distrito', blank=True, null=True)
-    nombre = models.CharField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'comunidad'
-
-
 class Denuncia(models.Model):
     id_denuncia = models.IntegerField(primary_key=True)
     id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_usuario', blank=True, null=True)
@@ -66,32 +121,12 @@ class Denuncia(models.Model):
         db_table = 'denuncia'
 
 
-class Departamento(models.Model):
-    id_departamento = models.IntegerField(primary_key=True)
-    nombre = models.CharField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'departamento'
-    
-    def __str__(self):
-        return self.nombre
-
-
 class Disponibilidad(models.Model):
     id_disponibilidad = models.IntegerField(primary_key=True)
     descripcion = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'disponibilidad'
-
-
-class Distrito(models.Model):
-    id_distrito = models.IntegerField(primary_key=True)
-    id_provincia = models.ForeignKey('Provincia', models.DO_NOTHING, db_column='id_provincia', blank=True, null=True)
-    nombre = models.CharField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'distrito'
     
 
 class Empleador(models.Model):
@@ -181,15 +216,6 @@ class Profile(models.Model):
     class Meta:
         db_table = 'profile'
 
-
-class Provincia(models.Model):
-    id_provincia = models.IntegerField(primary_key=True)
-    id_departamento = models.ForeignKey(Departamento, models.DO_NOTHING, db_column='id_departamento', blank=True, null=True)
-    nombre = models.CharField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'provincia'
-
         
 class TrabajosRealizados(models.Model):
     usuario = models.ForeignKey('Usuario', models.DO_NOTHING)
@@ -202,27 +228,39 @@ class TrabajosRealizados(models.Model):
     class Meta:
         db_table = 'trabajos_realizados'
 
-
-class Usuario(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil') #para mantener la personalizacion
-    
-    id_usuario = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=150, blank=False, null=False)
-    nombres = models.CharField(blank=True, null=True)
-    apellidos = models.CharField(blank=True, null=True)
-    dni = models.CharField(blank=True, null=True)
-    telefono = models.CharField(blank=True, null=True)
-    direccion = models.TextField(blank=True, null=True)
-    email = models.CharField(blank=True, null=True)
-    clave = models.TextField(blank=True, null=True)
-    fecha_nacimiento = models.DateField(blank=True, null=True)
-    sexo = models.CharField(blank=True, null=True)
-    tipo_usuario = models.TextField(blank=True, null=True)  # This field type is a guess.
-    id_comunidad = models.ForeignKey(Comunidad, models.DO_NOTHING, db_column='id_comunidad', blank=True, null=True)
-    habilitado = models.BooleanField(blank=True, null=True)
+class Certificacion(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='certificaciones/')
+    descripcion = models.CharField(max_length=255)
+    fecha_subida = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'usuario'
+        db_table = 'certificacion'
+
+
+class AntecedentePenal(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='penales/')
+    aprobado = models.BooleanField(default=False)
+    observaciones = models.TextField(blank=True)
+
+    class Meta:
+        db_table = 'antecedente_penal'
+
+
+class Empresa(models.Model):
+    id_empresa = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255)
+    ruc = models.CharField(max_length=11, unique=True)
+    razon_social = models.CharField(max_length=255)
+    direccion = models.TextField(blank=True, null=True)
+    telefono = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    representante = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    fecha_registro = models.DateField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'empresa'
 
 
 class UsuarioCategoria(models.Model):
